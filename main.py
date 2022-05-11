@@ -65,7 +65,7 @@ if __name__ == '__main__':
                 tokens.append(('FUNCTION', char_pos, t_str))
                 tokens.append(('ARGUMENTS_START', char_pos + temp_char_index, '('))
                 char_pos += temp_char_index + 1
-            elif (temp_char == ' ' or temp_char=='|') and t_str.lower() in ['sub', 'var', 'while']:
+            elif (temp_char == ' ' or temp_char=='|') and t_str.lower() in ['sub', 'var', 'while', 'if']:
                 tokens.append(('STATEMENT', char_pos, t_str))
                 char_pos += temp_char_index + 1
             elif temp_char in [' ', ')', ';', '|']:

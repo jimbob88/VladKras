@@ -10,6 +10,8 @@ sub main {
     var i = 0;
     Print("Hello " + name + lastName);
     while |true| {
-        Print("Hello")
+        if |i == 0| {
+            Print("Hello");
+        }
     }
 }

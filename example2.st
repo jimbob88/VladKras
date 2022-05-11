@@ -6,5 +6,7 @@ sub main {
     resetCursor();
     var name = "James";
     var lastName = askInput("What is your last name? ");
+    var fl = 1.0;
+    var i = 0;
     Print("Hello " + name + lastName);
 }

@@ -41,8 +41,7 @@ if __name__ == '__main__':
             tokens.append(('STRING', char_pos, t_str[:-1]))
             char_pos += temp_char_index + 1
         elif text[char_pos] in string.ascii_letters:
-            if char_pos == 233:
-                print(text[char_pos])
+            # Match functions statements and variables
             temp_char=''
             temp_char_index=1
             t_str = text[char_pos]
@@ -61,14 +60,26 @@ if __name__ == '__main__':
             elif temp_char in [' ', ')', ';']:
                 tokens.append(('VARIABLE', char_pos, t_str))
                 char_pos += temp_char_index
+        elif text[char_pos].isnumeric():
+            # Match numbers
+            temp_char=''
+            temp_char_index=1
+            t_str = text[char_pos]
+            while temp_char.isnumeric() or temp_char == '.':
+                temp_char = text[char_pos + temp_char_index]
+                if not (temp_char.isnumeric() or temp_char == '.'):
+                    break
+                t_str += temp_char
+                temp_char_index += 1
+            if '.' in t_str:
+                tokens.append(('FLOAT', char_pos, float(t_str)))
+                char_pos += temp_char_index
+            else:
+                tokens.append(('INT', char_pos, int(t_str)))
+                char_pos += temp_char_index
+            
         else:
             char_pos += 1
-            
-        # if text[char_pos] == 's' and len(text) - char_pos >= 3:
-        #     if text[char_pos:char_pos+3] == 'sub':
-        #         tokens.append(('SUB_INIT', char_pos))
-        #         char_pos += 3
-        #         continue
 
         print(tokens)
         print(char_pos)

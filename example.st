@@ -1,7 +1,3 @@
-sub other {
-     printAt(6, 1, "I love programming");
-}
-
 sub main {
     clearScreen();
     enableCursor();
@@ -27,7 +23,5 @@ sub main {
             Print("No");
             i -= 1;
         }
-        break;
     }
-    call other;
 }

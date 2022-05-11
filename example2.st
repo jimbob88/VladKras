@@ -9,9 +9,19 @@ sub main {
     var fl = 1.0;
     var i = 0;
     Print("Hello " + name + lastName);
+
+    var j = 0;
+    for(j = 0, |j < 19|, j++) {
+        Print(j);
+    }
+
     while |true| {
         if |i == 0| {
             Print("Hello");
+            i += 1;
+        } else {
+            Print("No");
+            i -= 1;
         }
     }
 }

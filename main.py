@@ -26,9 +26,41 @@ if __name__ == '__main__':
         elif text[char_pos] == ';':
             tokens.append(('END_LINE', char_pos, ';'))
             char_pos += 1
+        elif text[char_pos] == '+':
+            if text[char_pos + 1] != '=':
+                tokens.append(('PLUS', char_pos, '+'))
+                char_pos += 1
+            else:
+                tokens.append(('PLUS_EQUALS', char_pos, '+='))
+                char_pos += 2
+        elif text[char_pos] == '-':
+            if text[char_pos + 1] != '=':
+                tokens.append(('MINUS', char_pos, '-'))
+                char_pos += 1
+            else:
+                tokens.append(('MINUS_EQUALS', char_pos, '-='))
+                char_pos += 2      
+        elif text[char_pos] == '*':
+            if text[char_pos + 1] != '=':
+                tokens.append(('MULTIPLY', char_pos, '*'))
+                char_pos += 1
+            else:
+                tokens.append(('MULTIPLY_EQUALS', char_pos, '*='))
+                char_pos += 2 
+        elif text[char_pos] == '/':
+            if text[char_pos + 1] != '=':
+                tokens.append(('DIVIDE', char_pos, '/'))
+                char_pos += 1
+            else:
+                tokens.append(('DIVIDE_EQUALS', char_pos, '/='))
+                char_pos += 2 
         elif text[char_pos] == '=':
-            tokens.append(('ASSIGN', char_pos, '='))
-            char_pos += 1
+            if text[char_pos + 1] != '=':
+                tokens.append(('ASSIGN', char_pos, '='))
+                char_pos += 1
+            else:
+                tokens.append(('COMPARISON', char_pos, '=='))
+                char_pos += 2
         elif text[char_pos] == ')':
             tokens.append(('ARGUMENTS_END', char_pos, ')'))
             char_pos += 1
@@ -61,14 +93,17 @@ if __name__ == '__main__':
                 t_str += temp_char
                 temp_char_index += 1
             # temp_char can be treated as the escape character in this case
-            if temp_char == '(':
+            
+            if (temp_char in [' ', '|', '(']) and t_str.lower() in ['sub', 'var', 'while', 'if', 'for']:
+                tokens.append(('STATEMENT', char_pos, t_str))
+                if temp_char == '(':
+                    tokens.append(('ARGUMENTS_START', char_pos + temp_char_index, '('))
+                char_pos += temp_char_index + 1
+            elif temp_char == '(':
                 tokens.append(('FUNCTION', char_pos, t_str))
                 tokens.append(('ARGUMENTS_START', char_pos + temp_char_index, '('))
                 char_pos += temp_char_index + 1
-            elif (temp_char == ' ' or temp_char=='|') and t_str.lower() in ['sub', 'var', 'while', 'if']:
-                tokens.append(('STATEMENT', char_pos, t_str))
-                char_pos += temp_char_index + 1
-            elif temp_char in [' ', ')', ';', '|']:
+            elif temp_char in [' ', ')', ';', '|', '=', '+', '-', '*', '/']:
                 if t_str in ['true', 'false']:
                     tokens.append(('BOOLEAN', char_pos, t_str))
                 else:

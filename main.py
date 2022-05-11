@@ -21,13 +21,22 @@ if __name__ == '__main__':
             char_pos += 1    
         elif text[char_pos] == '}':
             # Matches end of blocks
-            tokens.append(('END_BLOCK', char_pos, '{'))
+            tokens.append(('END_BLOCK', char_pos, '}'))
             char_pos += 1
         elif text[char_pos] == ';':
             tokens.append(('END_LINE', char_pos, ';'))
             char_pos += 1
         elif text[char_pos] == '=':
             tokens.append(('ASSIGN', char_pos, '='))
+            char_pos += 1
+        elif text[char_pos] == ')':
+            tokens.append(('ARGUMENTS_END', char_pos, ')'))
+            char_pos += 1
+        elif text[char_pos] == ',':
+            tokens.append(('ARGUMENTS_SEP', char_pos, ','))
+            char_pos += 1
+        elif text[char_pos] == '|':
+            tokens.append(('CONDITION_WRAPPER', char_pos, '|'))
             char_pos += 1
         elif text[char_pos] in ['"', "'"]:
             # Matches string literals
@@ -39,7 +48,7 @@ if __name__ == '__main__':
                 t_str += temp_char
                 temp_char_index += 1
             tokens.append(('STRING', char_pos, t_str[:-1]))
-            char_pos += temp_char_index + 1
+            char_pos += temp_char_index
         elif text[char_pos] in string.ascii_letters:
             # Match functions statements and variables
             temp_char=''
@@ -51,14 +60,19 @@ if __name__ == '__main__':
                     break
                 t_str += temp_char
                 temp_char_index += 1
+            # temp_char can be treated as the escape character in this case
             if temp_char == '(':
                 tokens.append(('FUNCTION', char_pos, t_str))
+                tokens.append(('ARGUMENTS_START', char_pos + temp_char_index, '('))
                 char_pos += temp_char_index + 1
-            elif temp_char == ' ' and t_str.lower() in ['sub', 'var']:
+            elif (temp_char == ' ' or temp_char=='|') and t_str.lower() in ['sub', 'var', 'while']:
                 tokens.append(('STATEMENT', char_pos, t_str))
                 char_pos += temp_char_index + 1
-            elif temp_char in [' ', ')', ';']:
-                tokens.append(('VARIABLE', char_pos, t_str))
+            elif temp_char in [' ', ')', ';', '|']:
+                if t_str in ['true', 'false']:
+                    tokens.append(('BOOLEAN', char_pos, t_str))
+                else:
+                    tokens.append(('VARIABLE', char_pos, t_str))
                 char_pos += temp_char_index
         elif text[char_pos].isnumeric():
             # Match numbers

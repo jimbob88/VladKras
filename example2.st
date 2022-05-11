@@ -9,4 +9,7 @@ sub main {
     var fl = 1.0;
     var i = 0;
     Print("Hello " + name + lastName);
+    while |true| {
+        Print("Hello")
+    }
 }

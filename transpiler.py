@@ -1,5 +1,5 @@
 from collections import OrderedDict
-
+import ete3
 
 input_tokens = [('STATEMENT', 0, 'sub'),
  ('VARIABLE', 4, 'other'),
@@ -246,6 +246,25 @@ def treeify(tokens):
 
     return tree
 
+def toNewick(l):
+  t_tuple = []
+  for idx, node in enumerate(l):
+    if len(node.connectedLowerNodes) > 0:
+      t_tuple.append([node.tokenDetails.tokenType, toNewick(node.connectedLowerNodes)])
+    else:
+      t_tuple.append(node.tokenDetails.tokenType)
+  return str(t_tuple).replace('[', '(').replace(']', ')').replace("'", "").replace(' ', '') #tuple(tuple(sub) for sub in t_tuple)
+
+
 if __name__ == '__main__':
     t = treeify(tokens=input_tokens)
+    newickString = toNewick(t.currentNode.connectedLowerNodes) + ";"
+    newickTree = ete3.Tree(newickString)
+    print(newickTree)
+    ts = ete3.TreeStyle()
+    ts.show_leaf_name = True
+    # circular_style.mode = "c" # draw tree in circular mode
+    ts.scale = 20
+    ts.rotation = 90
+    newickTree.render("Tree.png", w=1830, units="mm", tree_style=ts)
 

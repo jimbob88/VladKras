@@ -67,6 +67,27 @@ if __name__ == '__main__':
             else:
                 tokens.append(('COMPARISON', char_pos, '=='))
                 char_pos += 2
+        elif text[char_pos] == '!':
+            if text[char_pos + 1] != '=':
+                tokens.append(('NOT', char_pos, '='))
+                char_pos += 1
+            else:
+                tokens.append(('NOT_EQUAL', char_pos, '!='))
+                char_pos += 2
+        elif text[char_pos] == '<':
+            if text[char_pos + 1] != '=':
+                tokens.append(('LESS_THAN', char_pos, '<'))
+                char_pos += 1
+            else:
+                tokens.append(('LESS_OR_EQUAL', char_pos, '<='))
+                char_pos += 2    
+        elif text[char_pos] == '>':
+            if text[char_pos + 1] != '=':
+                tokens.append(('GREATER_THAN', char_pos, '>'))
+                char_pos += 1
+            else:
+                tokens.append(('GREATER_OR_EQUAL', char_pos, '>='))
+                char_pos += 2           
         elif text[char_pos] == ')':
             tokens.append(('ARGUMENTS_END', char_pos, ')'))
             char_pos += 1
@@ -114,6 +135,9 @@ if __name__ == '__main__':
                     tokens.append(('BOOLEAN', char_pos, t_str))
                 else:
                     tokens.append(('VARIABLE', char_pos, t_str))
+                char_pos += temp_char_index
+            elif temp_char == '$':
+                tokens.append(('VARIABLE', char_pos, t_str+'$'))
                 char_pos += temp_char_index
         elif text[char_pos].isnumeric():
             # Match numbers

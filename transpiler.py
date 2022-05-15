@@ -1,5 +1,6 @@
 from collections import OrderedDict
 import ete3
+import pprint
 
 input_tokens = [('STATEMENT', 0, 'sub'),
  ('VARIABLE', 4, 'other'),
@@ -43,108 +44,108 @@ input_tokens = [('STATEMENT', 0, 'sub'),
  ('ARGUMENTS_END', 178, ')'),
  ('END_LINE', 179, ';'),
  ('STATEMENT', 185, 'var'),
- ('VARIABLE', 189, 'name'),
- ('ASSIGN', 194, '='),
- ('STRING', 196, 'James'),
- ('END_LINE', 203, ';'),
- ('STATEMENT', 209, 'var'),
- ('VARIABLE', 213, 'lastName'),
- ('ASSIGN', 222, '='),
- ('FUNCTION', 224, 'askInput'),
- ('ARGUMENTS_START', 232, '('),
- ('STRING', 233, 'What is your last name? '),
- ('ARGUMENTS_END', 259, ')'),
- ('END_LINE', 260, ';'),
- ('STATEMENT', 266, 'var'),
- ('VARIABLE', 270, 'fl'),
- ('ASSIGN', 273, '='),
- ('INT', 275, 1),
- ('INT', 277, 0),
- ('END_LINE', 278, ';'),
- ('STATEMENT', 284, 'var'),
- ('VARIABLE', 288, 'i'),
- ('ASSIGN', 290, '='),
- ('INT', 292, 0),
- ('END_LINE', 293, ';'),
- ('FUNCTION', 299, 'Print'),
- ('ARGUMENTS_START', 304, '('),
- ('STRING', 305, 'Hello '),
- ('PLUS', 314, '+'),
- ('VARIABLE', 316, 'name'),
- ('PLUS', 321, '+'),
- ('VARIABLE', 323, 'lastName'),
- ('ARGUMENTS_END', 331, ')'),
- ('END_LINE', 332, ';'),
- ('STATEMENT', 339, 'var'),
- ('VARIABLE', 343, 'j'),
- ('ASSIGN', 345, '='),
- ('INT', 347, 0),
- ('END_LINE', 348, ';'),
- ('STATEMENT', 354, 'for'),
- ('ARGUMENTS_START', 357, '('),
- ('VARIABLE', 358, 'j'),
- ('ASSIGN', 360, '='),
- ('INT', 362, 0),
- ('ARGUMENTS_SEP', 363, ','),
- ('CONDITION_WRAPPER', 365, '|'),
- ('VARIABLE', 366, 'j'),
- ('INT', 370, 1),
- ('INT', 371, 9),
- ('CONDITION_WRAPPER', 372, '|'),
- ('ARGUMENTS_SEP', 373, ','),
- ('VARIABLE', 375, 'j'),
- ('PLUS_ONE', 376, '++'),
- ('ARGUMENTS_END', 378, ')'),
- ('START_BLOCK', 380, '{'),
- ('FUNCTION', 390, 'Print'),
- ('ARGUMENTS_START', 395, '('),
- ('VARIABLE', 396, 'j'),
- ('ARGUMENTS_END', 397, ')'),
- ('END_LINE', 398, ';'),
- ('END_BLOCK', 404, '}'),
- ('STATEMENT', 411, 'while'),
- ('CONDITION_WRAPPER', 417, '|'),
- ('BOOLEAN', 418, 'true'),
- ('CONDITION_WRAPPER', 422, '|'),
- ('START_BLOCK', 424, '{'),
- ('STATEMENT', 434, 'if'),
- ('CONDITION_WRAPPER', 437, '|'),
- ('VARIABLE', 438, 'i'),
- ('COMPARISON', 440, '=='),
- ('INT', 443, 0),
- ('CONDITION_WRAPPER', 444, '|'),
- ('START_BLOCK', 446, '{'),
- ('FUNCTION', 460, 'Print'),
- ('ARGUMENTS_START', 465, '('),
- ('STRING', 466, 'Hello'),
- ('ARGUMENTS_END', 473, ')'),
- ('END_LINE', 474, ';'),
- ('VARIABLE', 488, 'i'),
- ('PLUS_EQUALS', 490, '+='),
- ('PLUS', 492, '+'),
- ('INT', 493, 1),
- ('END_LINE', 494, ';'),
- ('END_BLOCK', 504, '}'),
- ('VARIABLE', 506, 'else'),
- ('START_BLOCK', 511, '{'),
- ('FUNCTION', 525, 'Print'),
- ('ARGUMENTS_START', 530, '('),
- ('STRING', 531, 'No'),
- ('ARGUMENTS_END', 535, ')'),
- ('END_LINE', 536, ';'),
- ('VARIABLE', 550, 'i'),
- ('MINUS_EQUALS', 552, '-='),
- ('MINUS', 554, '-'),
- ('INT', 555, 1),
- ('END_LINE', 556, ';'),
- ('END_BLOCK', 566, '}'),
- ('VARIABLE', 576, 'break'),
- ('END_LINE', 581, ';'),
- ('END_BLOCK', 587, '}'),
- ('STATEMENT', 593, 'call'),
- ('VARIABLE', 598, 'other'),
- ('END_LINE', 603, ';'),
- ('END_BLOCK', 605, '}')]
+ ('VARIABLE', 189, 'name$'),
+ ('ASSIGN', 195, '='),
+ ('STRING', 197, 'James'),
+ ('END_LINE', 204, ';'),
+ ('STATEMENT', 210, 'var'),
+ ('VARIABLE', 214, 'lastName$'),
+ ('ASSIGN', 224, '='),
+ ('FUNCTION', 226, 'askInput'),
+ ('ARGUMENTS_START', 234, '('),
+ ('STRING', 235, 'What is your last name? '),
+ ('ARGUMENTS_END', 261, ')'),
+ ('END_LINE', 262, ';'),
+ ('STATEMENT', 268, 'var'),
+ ('VARIABLE', 272, 'fl'),
+ ('ASSIGN', 275, '='),
+ ('INT', 277, 1),
+ ('INT', 279, 0),
+ ('END_LINE', 280, ';'),
+ ('STATEMENT', 286, 'var'),
+ ('VARIABLE', 290, 'i'),
+ ('ASSIGN', 292, '='),
+ ('INT', 294, 0),
+ ('END_LINE', 295, ';'),
+ ('FUNCTION', 301, 'Print'),
+ ('ARGUMENTS_START', 306, '('),
+ ('STRING', 307, 'Hello '),
+ ('PLUS', 316, '+'),
+ ('VARIABLE', 318, 'name'),
+ ('PLUS', 323, '+'),
+ ('VARIABLE', 325, 'lastName$'),
+ ('ARGUMENTS_END', 334, ')'),
+ ('END_LINE', 335, ';'),
+ ('STATEMENT', 342, 'var'),
+ ('VARIABLE', 346, 'j'),
+ ('ASSIGN', 348, '='),
+ ('INT', 350, 0),
+ ('END_LINE', 351, ';'),
+ ('STATEMENT', 357, 'for'),
+ ('ARGUMENTS_START', 360, '('),
+ ('VARIABLE', 361, 'j'),
+ ('ASSIGN', 363, '='),
+ ('INT', 365, 0),
+ ('ARGUMENTS_SEP', 366, ','),
+ ('CONDITION_WRAPPER', 368, '|'),
+ ('VARIABLE', 369, 'j'),
+ ('INT', 373, 1),
+ ('INT', 374, 9),
+ ('CONDITION_WRAPPER', 375, '|'),
+ ('ARGUMENTS_SEP', 376, ','),
+ ('VARIABLE', 378, 'j'),
+ ('PLUS_ONE', 379, '++'),
+ ('ARGUMENTS_END', 381, ')'),
+ ('START_BLOCK', 383, '{'),
+ ('FUNCTION', 393, 'Print'),
+ ('ARGUMENTS_START', 398, '('),
+ ('VARIABLE', 399, 'j'),
+ ('ARGUMENTS_END', 400, ')'),
+ ('END_LINE', 401, ';'),
+ ('END_BLOCK', 407, '}'),
+ ('STATEMENT', 414, 'while'),
+ ('CONDITION_WRAPPER', 420, '|'),
+ ('BOOLEAN', 421, 'true'),
+ ('CONDITION_WRAPPER', 425, '|'),
+ ('START_BLOCK', 427, '{'),
+ ('STATEMENT', 437, 'if'),
+ ('CONDITION_WRAPPER', 440, '|'),
+ ('VARIABLE', 441, 'i'),
+ ('COMPARISON', 443, '=='),
+ ('INT', 446, 0),
+ ('CONDITION_WRAPPER', 447, '|'),
+ ('START_BLOCK', 449, '{'),
+ ('FUNCTION', 463, 'Print'),
+ ('ARGUMENTS_START', 468, '('),
+ ('STRING', 469, 'Hello'),
+ ('ARGUMENTS_END', 476, ')'),
+ ('END_LINE', 477, ';'),
+ ('VARIABLE', 491, 'i'),
+ ('PLUS_EQUALS', 493, '+='),
+ ('PLUS', 495, '+'),
+ ('INT', 496, 1),
+ ('END_LINE', 497, ';'),
+ ('END_BLOCK', 507, '}'),
+ ('VARIABLE', 509, 'else'),
+ ('START_BLOCK', 514, '{'),
+ ('FUNCTION', 528, 'Print'),
+ ('ARGUMENTS_START', 533, '('),
+ ('STRING', 534, 'No'),
+ ('ARGUMENTS_END', 538, ')'),
+ ('END_LINE', 539, ';'),
+ ('VARIABLE', 553, 'i'),
+ ('MINUS_EQUALS', 555, '-='),
+ ('MINUS', 557, '-'),
+ ('INT', 558, 1),
+ ('END_LINE', 559, ';'),
+ ('END_BLOCK', 569, '}'),
+ ('VARIABLE', 579, 'break'),
+ ('END_LINE', 584, ';'),
+ ('END_BLOCK', 590, '}'),
+ ('STATEMENT', 596, 'call'),
+ ('VARIABLE', 601, 'other'),
+ ('END_LINE', 606, ';'),
+ ('END_BLOCK', 608, '}')]
 
 
 class tokenType:
@@ -184,7 +185,7 @@ class Tree:
             raise SyntaxError("It looks like there is an indentation issue")
 
 
-def treeify(tokens):
+def treeify(tokens: list) -> Tree:
     # Tree based off subroutines
     classed_tokens = []
     for token in tokens:
@@ -194,7 +195,6 @@ def treeify(tokens):
     tree = Tree()
     token_idx = 0
     current_sub = 'NA'
-    depth = 0
     while True:
         if classed_tokens[token_idx].tokenVal == 'sub':
             if classed_tokens[token_idx+1].tokenType != 'VARIABLE':
@@ -241,7 +241,7 @@ def treeify(tokens):
             tree.decreaseDepth()
             token_idx += 1
         
-        print(token_idx, depth, tree)
+        print(token_idx, tree)
 
         if token_idx >= len(tokens):
             break
@@ -256,6 +256,50 @@ def toNewick(l):
     else:
       t_tuple.append(node.tokenDetails.tokenType)
   return str(t_tuple).replace('[', '(').replace(']', ')').replace("'", "").replace(' ', '') #tuple(tuple(sub) for sub in t_tuple)
+
+def toList(l):
+  tList = []
+  for idx, node in enumerate(l):
+    if len(node.connectedLowerNodes) > 0:
+      tList.append([node.tokenDetails, toList(node.connectedLowerNodes)])
+    else:
+      tList.append(node.tokenDetails)
+  return tList
+
+def transpile(tree: Tree):
+    print(tree)
+    code = [
+        "GOSUB main",
+        "escape$=CHR$(27)",
+        'clear$=escape$+"E"',
+        'home$=escape$+"H"',
+        'move$=escape$+"Y"'
+    ]
+    treeList = toList(tree.currentNode.connectedLowerNodes)
+    for subroutine in treeList:
+        print(subroutine[0].tokenVal)
+        code.append("REM " + subroutine[0].tokenVal)
+        code.append("'")
+        # for token in subroutine[1]:
+        tokenIdx = 0
+        while True:
+            token = subroutine[1][tokenIdx]
+            print(token, token.tokenType, token.tokenVal)
+            if type(token) != list:
+                if code[-1] == "'":
+                    code.append('')
+                if token.tokenVal == 'printAt':
+                    print("PRINTAT")
+                    endLine = [i for i, n in enumerate(subroutine[1][tokenIdx:]) if n.tokenType == 'END_LINE'][0]
+                    for i in range(tokenIdx, endLine):
+                        print(subroutine[1][i].tokenVal)
+                    break    
+        break
+    pprint.pprint(code)
+
+
+
+
 
 
 if __name__ == '__main__':
@@ -274,3 +318,4 @@ if __name__ == '__main__':
     ts.rotation = 90
     newickTree.render("Tree.png", w=1830, units="mm", tree_style=ts)
 
+    transpile(t)

@@ -1,6 +1,8 @@
 from collections import OrderedDict
+from re import L
 import ete3
 import pprint
+import itertools
 
 input_tokens = [('STATEMENT', 0, 'sub'),
  ('VARIABLE', 4, 'other'),
@@ -184,12 +186,15 @@ class Tree:
         else:
             raise SyntaxError("It looks like there is an indentation issue")
 
-
-def treeify(tokens: list) -> Tree:
-    # Tree based off subroutines
+def tokenify(tokens: list) -> list:
     classed_tokens = []
     for token in tokens:
         classed_tokens.append(tokenType(token))
+    return classed_tokens
+
+def treeify(tokens: list) -> Tree:
+    # Tree based off subroutines
+    classed_tokens = tokenify(tokens)
 
     # tree = OrderedDict()
     tree = Tree()
@@ -266,38 +271,85 @@ def toList(l):
       tList.append(node.tokenDetails)
   return tList
 
-def transpile(tree: Tree):
-    print(tree)
-    code = [
-        "GOSUB main",
-        "escape$=CHR$(27)",
-        'clear$=escape$+"E"',
-        'home$=escape$+"H"',
-        'move$=escape$+"Y"'
-    ]
-    treeList = toList(tree.currentNode.connectedLowerNodes)
-    for subroutine in treeList:
-        print(subroutine[0].tokenVal)
-        code.append("REM " + subroutine[0].tokenVal)
-        code.append("'")
-        # for token in subroutine[1]:
-        tokenIdx = 0
-        while True:
-            token = subroutine[1][tokenIdx]
-            print(token, token.tokenType, token.tokenVal)
-            if type(token) != list:
-                if code[-1] == "'":
-                    code.append('')
-                if token.tokenVal == 'printAt':
-                    print("PRINTAT")
-                    endLine = [i for i, n in enumerate(subroutine[1][tokenIdx:]) if n.tokenType == 'END_LINE'][0]
-                    for i in range(tokenIdx, endLine):
-                        print(subroutine[1][i].tokenVal)
-                    break    
-        break
-    pprint.pprint(code)
 
 
+def transpileFlat(flatTokenList: list) -> list:
+    code = ['']
+    # context = 'NA'
+    currentVar = ''
+    for token in flatTokenList:
+        if token.tokenType in ['INT', 'FLOAT', 'PLUS', 'MINUS', 'DIVIDE', 'MULTIPLY', 'LESS_THAN', 'GREATER_THAN', 'LESS_OR_EQUAL', 'GREATER_OR_EQUAL', 'ASSIGN', 'NOT_EQUAL']:
+            code[-1] += str(token.tokenVal)
+        elif token.tokenType == 'VARIABLE':
+            code[-1] += token.tokenVal
+            currentVar = token.tokenVal
+        elif token.tokenType == 'END_LINE':
+            code.append('')
+        elif token.tokenType == 'COMPARISON':
+            code[-1] += '='
+        elif token.tokenType == 'PLUS_ONE':
+            code[-1] += f'= {currentVar} + 1'
+        elif token.tokenType == 'MINUS_ONE':
+            code[-1] += f'= {currentVar} - 1'
+        elif token.tokenType == 'MINUS_EQUALS':
+            code[-1] += f'= {currentVar} - '
+        elif token.tokenType == 'PLUS_EQUALS':
+            code[-1] += f'= {currentVar} + '
+        elif token.tokenVal == 'Print':
+            code[-1] += 'PRINT '
+        elif token.tokenVal == 'while':
+            code[-1] += 'WHILE '
+        elif token.tokenType == 'STRING':
+            code[-1] += f'"{token.tokenVal}"'
+
+    return code
+
+
+
+def transpile(tokenList: list) -> str:
+    tokenIdx = 0
+    context = 'null'
+    subName = 'NA'
+    code = ['GOSUB main',
+    'escape$=CHR$(27)',
+    'clear$=escape$+"E"',
+    'home$=escape$+"H"',
+    'move$=escape$+"Y"',
+    'REM other',
+    "'",
+    '']
+    subroutines = OrderedDict()
+    noIfStatements = 0
+    endLineStatementPos = [n for n, t in enumerate(tokenList) if t.tokenType == 'END_LINE']
+    finishedLines = 0
+    while True:
+        if tokenList[tokenIdx].tokenVal == 'sub':
+            context = 'subroutine'
+            subName = tokenList[tokenIdx+1].tokenVal
+            subroutines[subName] = []
+            tokenIdx += 2
+        elif tokenList[tokenIdx].tokenVal == 'printAt':
+            temp = list(list(g) for k,g in itertools.groupby(tokenList[tokenIdx+2:endLineStatementPos[finishedLines]-1], lambda x: x.tokenType not in ['ARGUMENTS_SEP']) if k)
+            temp = [transpileFlat(t_list) for t_list in temp]
+            lineNo = ' '.join(temp[0])
+            columnNo = ' '.join(temp[1])
+            string = ' '.join(temp[2])
+            subroutines[subName].append(
+                f"PRINT move$;CHR$({lineNo}+32);CHR$({columnNo}+32)"
+            )
+            subroutines[subName].append(
+                f"PRINT {string};"
+            )
+            tokenIdx += endLineStatementPos[finishedLines] - tokenIdx
+        elif tokenList[tokenIdx].tokenType == 'END_LINE':
+            finishedLines += 1
+            tokenIdx += 1
+        else:
+            tokenIdx += 1
+        print(tokenIdx)
+        if tokenIdx >= len(tokenList):
+            break
+        print(subroutines)
 
 
 
@@ -318,4 +370,4 @@ if __name__ == '__main__':
     ts.rotation = 90
     newickTree.render("Tree.png", w=1830, units="mm", tree_style=ts)
 
-    transpile(t)
+    print(transpile(tokenify(input_tokens)))

@@ -132,7 +132,7 @@ if __name__ == '__main__':
 
         print(tokens)
         print(char_pos)
-        if char_pos >= len(text) - 1:
+        if char_pos >= len(text):
             finished = True
             break
 

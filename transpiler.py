@@ -93,8 +93,7 @@ input_tokens = [('STATEMENT', 0, 'sub'),
  ('CONDITION_WRAPPER', 372, '|'),
  ('ARGUMENTS_SEP', 373, ','),
  ('VARIABLE', 375, 'j'),
- ('PLUS', 376, '+'),
- ('PLUS', 377, '+'),
+ ('PLUS_ONE', 376, '++'),
  ('ARGUMENTS_END', 378, ')'),
  ('START_BLOCK', 380, '{'),
  ('FUNCTION', 390, 'Print'),
@@ -122,6 +121,7 @@ input_tokens = [('STATEMENT', 0, 'sub'),
  ('END_LINE', 474, ';'),
  ('VARIABLE', 488, 'i'),
  ('PLUS_EQUALS', 490, '+='),
+ ('PLUS', 492, '+'),
  ('INT', 493, 1),
  ('END_LINE', 494, ';'),
  ('END_BLOCK', 504, '}'),
@@ -134,6 +134,7 @@ input_tokens = [('STATEMENT', 0, 'sub'),
  ('END_LINE', 536, ';'),
  ('VARIABLE', 550, 'i'),
  ('MINUS_EQUALS', 552, '-='),
+ ('MINUS', 554, '-'),
  ('INT', 555, 1),
  ('END_LINE', 556, ';'),
  ('END_BLOCK', 566, '}'),
@@ -144,6 +145,7 @@ input_tokens = [('STATEMENT', 0, 'sub'),
  ('VARIABLE', 598, 'other'),
  ('END_LINE', 603, ';'),
  ('END_BLOCK', 605, '}')]
+
 
 class tokenType:
     def __init__(self, tupe):
@@ -257,13 +259,17 @@ def toNewick(l):
 
 
 if __name__ == '__main__':
+    # Create tree from tokens
     t = treeify(tokens=input_tokens)
+
+    # Print tree
     newickString = toNewick(t.currentNode.connectedLowerNodes) + ";"
     newickTree = ete3.Tree(newickString)
     print(newickTree)
+
+    # Create png of tree
     ts = ete3.TreeStyle()
     ts.show_leaf_name = True
-    # circular_style.mode = "c" # draw tree in circular mode
     ts.scale = 20
     ts.rotation = 90
     newickTree.render("Tree.png", w=1830, units="mm", tree_style=ts)

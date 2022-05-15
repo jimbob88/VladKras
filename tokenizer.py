@@ -27,19 +27,25 @@ if __name__ == '__main__':
             tokens.append(('END_LINE', char_pos, ';'))
             char_pos += 1
         elif text[char_pos] == '+':
-            if text[char_pos + 1] != '=':
-                tokens.append(('PLUS', char_pos, '+'))
-                char_pos += 1
-            else:
+            if text[char_pos + 1] == '=':
                 tokens.append(('PLUS_EQUALS', char_pos, '+='))
                 char_pos += 2
-        elif text[char_pos] == '-':
-            if text[char_pos + 1] != '=':
-                tokens.append(('MINUS', char_pos, '-'))
-                char_pos += 1
+            if text[char_pos + 1] == '+':
+                tokens.append(('PLUS_ONE', char_pos, '++'))
+                char_pos += 2
             else:
+                tokens.append(('PLUS', char_pos, '+'))
+                char_pos += 1
+        elif text[char_pos] == '-':
+            if text[char_pos + 1] == '=':
                 tokens.append(('MINUS_EQUALS', char_pos, '-='))
-                char_pos += 2      
+                char_pos += 2 
+            if text[char_pos + 1] == '-':
+                tokens.append(('MINUS_ONE', char_pos, '--'))
+                char_pos += 2 
+            else:
+                tokens.append(('MINUS', char_pos, '-'))
+                char_pos += 1     
         elif text[char_pos] == '*':
             if text[char_pos + 1] != '=':
                 tokens.append(('MULTIPLY', char_pos, '*'))

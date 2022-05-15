@@ -202,11 +202,37 @@ def treeify(tokens):
                 tree.connectToken(t=tokenType(("DEF_SUB", token_idx, subName)))
                 token_idx += 2
         elif classed_tokens[token_idx].tokenType == 'START_BLOCK':
-            # depth += 1
             token_idx += 1
         elif classed_tokens[token_idx].tokenType == 'END_BLOCK':
-            # depth -= 1
             tree.decreaseDepth()
+            token_idx += 1
+        elif classed_tokens[token_idx].tokenVal == 'while':
+            if classed_tokens[token_idx+1].tokenType == 'CONDITION_WRAPPER':
+                tree.connectToken(t=classed_tokens[token_idx])
+            else:
+                raise SyntaxError("While loop is not followed by condition wrapper '|'")
+            token_idx += 1
+        elif classed_tokens[token_idx].tokenVal == 'if':
+            if classed_tokens[token_idx+1].tokenType == 'CONDITION_WRAPPER':
+                tree.connectToken(t=classed_tokens[token_idx])
+            else:
+                raise SyntaxError("If statement is not followed by condition wrapper '|'")
+            token_idx += 1
+        elif classed_tokens[token_idx].tokenVal == 'else':
+            tree.connectToken(t=classed_tokens[token_idx])
+            token_idx += 1
+        elif classed_tokens[token_idx].tokenVal == 'for':
+            if classed_tokens[token_idx+1].tokenType == 'ARGUMENTS_START':
+                tree.connectToken(t=classed_tokens[token_idx])
+            else:
+                raise SyntaxError("For loop has no parameters")
+            token_idx += 1
+        elif classed_tokens[token_idx].tokenType == 'CONDITION_WRAPPER':
+            if tree.currentNode.tokenDetails.tokenType == 'CONDITION_WRAPPER':
+                # If it is the terminating position
+                tree.decreaseDepth()
+            else:
+                tree.connectToken(t=classed_tokens[token_idx])
             token_idx += 1
         else:
             tree.connectToken(t=classed_tokens[token_idx])

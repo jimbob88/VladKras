@@ -61,8 +61,7 @@ input_tokens = [('STATEMENT', 0, 'sub'),
  ('STATEMENT', 268, 'var'),
  ('VARIABLE', 272, 'fl'),
  ('ASSIGN', 275, '='),
- ('INT', 277, 1),
- ('INT', 279, 0),
+ ('FLOAT', 277, 1.0),
  ('END_LINE', 280, ';'),
  ('STATEMENT', 286, 'var'),
  ('VARIABLE', 290, 'i'),
@@ -73,81 +72,82 @@ input_tokens = [('STATEMENT', 0, 'sub'),
  ('ARGUMENTS_START', 306, '('),
  ('STRING', 307, 'Hello '),
  ('PLUS', 316, '+'),
- ('VARIABLE', 318, 'name'),
- ('PLUS', 323, '+'),
- ('VARIABLE', 325, 'lastName$'),
- ('ARGUMENTS_END', 334, ')'),
- ('END_LINE', 335, ';'),
- ('STATEMENT', 342, 'var'),
- ('VARIABLE', 346, 'j'),
- ('ASSIGN', 348, '='),
- ('INT', 350, 0),
- ('END_LINE', 351, ';'),
- ('STATEMENT', 357, 'for'),
- ('ARGUMENTS_START', 360, '('),
- ('VARIABLE', 361, 'j'),
- ('ASSIGN', 363, '='),
- ('INT', 365, 0),
- ('ARGUMENTS_SEP', 366, ','),
- ('CONDITION_WRAPPER', 368, '|'),
- ('VARIABLE', 369, 'j'),
- ('INT', 373, 1),
- ('INT', 374, 9),
- ('CONDITION_WRAPPER', 375, '|'),
- ('ARGUMENTS_SEP', 376, ','),
- ('VARIABLE', 378, 'j'),
- ('PLUS_ONE', 379, '++'),
- ('ARGUMENTS_END', 381, ')'),
- ('START_BLOCK', 383, '{'),
- ('FUNCTION', 393, 'Print'),
- ('ARGUMENTS_START', 398, '('),
- ('VARIABLE', 399, 'j'),
- ('ARGUMENTS_END', 400, ')'),
- ('END_LINE', 401, ';'),
- ('END_BLOCK', 407, '}'),
- ('STATEMENT', 414, 'while'),
- ('CONDITION_WRAPPER', 420, '|'),
- ('BOOLEAN', 421, 'true'),
- ('CONDITION_WRAPPER', 425, '|'),
- ('START_BLOCK', 427, '{'),
- ('STATEMENT', 437, 'if'),
- ('CONDITION_WRAPPER', 440, '|'),
- ('VARIABLE', 441, 'i'),
- ('COMPARISON', 443, '=='),
- ('INT', 446, 0),
- ('CONDITION_WRAPPER', 447, '|'),
- ('START_BLOCK', 449, '{'),
- ('FUNCTION', 463, 'Print'),
- ('ARGUMENTS_START', 468, '('),
- ('STRING', 469, 'Hello'),
- ('ARGUMENTS_END', 476, ')'),
- ('END_LINE', 477, ';'),
- ('VARIABLE', 491, 'i'),
- ('PLUS_EQUALS', 493, '+='),
- ('PLUS', 495, '+'),
- ('INT', 496, 1),
- ('END_LINE', 497, ';'),
- ('END_BLOCK', 507, '}'),
- ('VARIABLE', 509, 'else'),
- ('START_BLOCK', 514, '{'),
- ('FUNCTION', 528, 'Print'),
- ('ARGUMENTS_START', 533, '('),
- ('STRING', 534, 'No'),
- ('ARGUMENTS_END', 538, ')'),
- ('END_LINE', 539, ';'),
- ('VARIABLE', 553, 'i'),
- ('MINUS_EQUALS', 555, '-='),
- ('MINUS', 557, '-'),
- ('INT', 558, 1),
- ('END_LINE', 559, ';'),
- ('END_BLOCK', 569, '}'),
- ('VARIABLE', 579, 'break'),
- ('END_LINE', 584, ';'),
- ('END_BLOCK', 590, '}'),
- ('STATEMENT', 596, 'call'),
- ('VARIABLE', 601, 'other'),
- ('END_LINE', 606, ';'),
- ('END_BLOCK', 608, '}')]
+ ('VARIABLE', 318, 'name$'),
+ ('PLUS', 324, '+'),
+ ('VARIABLE', 326, 'lastName$'),
+ ('ARGUMENTS_END', 335, ')'),
+ ('END_LINE', 336, ';'),
+ ('STATEMENT', 343, 'var'),
+ ('VARIABLE', 347, 'j'),
+ ('ASSIGN', 349, '='),
+ ('INT', 351, 0),
+ ('END_LINE', 352, ';'),
+ ('STATEMENT', 358, 'for'),
+ ('ARGUMENTS_START', 361, '('),
+ ('VARIABLE', 362, 'j'),
+ ('ASSIGN', 364, '='),
+ ('INT', 366, 0),
+ ('ARGUMENTS_SEP', 367, ','),
+ ('CONDITION_WRAPPER', 369, '|'),
+ ('VARIABLE', 370, 'j'),
+ ('LESS_THAN', 372, '<'),
+ ('INT', 374, 19),
+ ('CONDITION_WRAPPER', 376, '|'),
+ ('ARGUMENTS_SEP', 377, ','),
+ ('VARIABLE', 379, 'j'),
+ ('PLUS_ONE', 380, '++'),
+ ('ARGUMENTS_END', 382, ')'),
+ ('START_BLOCK', 384, '{'),
+ ('FUNCTION', 394, 'Print'),
+ ('ARGUMENTS_START', 399, '('),
+ ('VARIABLE', 400, 'j'),
+ ('ARGUMENTS_END', 401, ')'),
+ ('END_LINE', 402, ';'),
+ ('END_BLOCK', 408, '}'),
+ ('STATEMENT', 415, 'while'),
+ ('CONDITION_WRAPPER', 421, '|'),
+ ('BOOLEAN', 422, 'true'),
+ ('CONDITION_WRAPPER', 426, '|'),
+ ('START_BLOCK', 428, '{'),
+ ('STATEMENT', 438, 'if'),
+ ('CONDITION_WRAPPER', 441, '|'),
+ ('VARIABLE', 442, 'i'),
+ ('COMPARISON', 444, '=='),
+ ('INT', 447, 0),
+ ('CONDITION_WRAPPER', 448, '|'),
+ ('START_BLOCK', 450, '{'),
+ ('FUNCTION', 464, 'Print'),
+ ('ARGUMENTS_START', 469, '('),
+ ('STRING', 470, 'Hello'),
+ ('ARGUMENTS_END', 477, ')'),
+ ('END_LINE', 478, ';'),
+ ('VARIABLE', 492, 'i'),
+ ('PLUS_EQUALS', 494, '+='),
+ ('PLUS', 496, '+'),
+ ('INT', 497, 1),
+ ('END_LINE', 498, ';'),
+ ('END_BLOCK', 508, '}'),
+ ('VARIABLE', 510, 'else'),
+ ('START_BLOCK', 515, '{'),
+ ('FUNCTION', 529, 'Print'),
+ ('ARGUMENTS_START', 534, '('),
+ ('STRING', 535, 'No'),
+ ('ARGUMENTS_END', 539, ')'),
+ ('END_LINE', 540, ';'),
+ ('VARIABLE', 554, 'i'),
+ ('MINUS_EQUALS', 556, '-='),
+ ('MINUS', 558, '-'),
+ ('INT', 559, 1),
+ ('END_LINE', 560, ';'),
+ ('END_BLOCK', 570, '}'),
+ ('VARIABLE', 580, 'break'),
+ ('END_LINE', 585, ';'),
+ ('END_BLOCK', 591, '}'),
+ ('STATEMENT', 597, 'call'),
+ ('VARIABLE', 602, 'other'),
+ ('END_LINE', 607, ';'),
+ ('END_BLOCK', 609, '}')]
+
 
 
 class tokenType:
@@ -301,9 +301,57 @@ def transpileFlat(flatTokenList: list) -> list:
             code[-1] += 'WHILE '
         elif token.tokenType == 'STRING':
             code[-1] += f'"{token.tokenVal}"'
+        # elif token.tokenVal == 'askInput':
+
 
     return code
 
+def cleanInputs(tokenList: list) -> list:
+    # print("Inputs:", inputs)
+    noInputs = 0
+    # for noInputs, idx in enumerate(inputs):
+    while True:
+        inputs = [idx for idx, token in enumerate(tokenList) if token.tokenVal == 'askInput']
+        if len(inputs) == 0:
+            break
+        idx = inputs[0]
+        noInputs += 1
+        depth = 1
+        tokenIdx = idx + 1
+        while True:
+            tokenIdx += 1
+            if tokenList[tokenIdx].tokenType == 'ARGUMENTS_END':
+                depth -= 1
+            elif tokenList[tokenIdx].tokenType == 'ARGUMENTS_START':
+                depth += 1
+            if depth == 0:
+                break
+        
+        inputString = tokenList[idx+2:tokenIdx]
+        print("inputString", inputString)
+        tokenList[idx:tokenIdx] = [
+           tokenType(('VARIABLE', -1, f"reservedInputValue{noInputs}$"))
+        ]
+        lastLineSearch = [
+            idx for idx, token in enumerate(tokenList[:idx]) 
+            if token.tokenType in ['START_BLOCK', 'END_LINE']
+        ][-1]
+        tokenList[lastLineSearch:lastLineSearch] = [
+            tokenType(('END_LINE', -1, ';')),
+            tokenType(("STATEMENT", -1, "INPUT")),
+            tokenType(('ARGUMENTS_START', -1, '(')),
+        ] + inputString + [
+            tokenType(('ARGUMENTS_SEP', -1, ',')),
+            tokenType(('VARIABLE', -1, f"reservedInputValue{noInputs}$")),
+            tokenType(('ARGUMENTS_END', -1, ')')),
+            tokenType(('END_LINE', -1, ';'))
+        ]
+        pprint.pprint([token.tokenVal for token in tokenList])
+        
+        
+
+    return tokenList
+        
 
 
 def transpile(tokenList: list) -> str:
@@ -315,6 +363,8 @@ def transpile(tokenList: list) -> str:
     'clear$=escape$+"E"',
     'home$=escape$+"H"',
     'move$=escape$+"Y"',
+    'con$=e$+"e"',
+    'coff$=e$+"f"',
     'REM other',
     "'",
     '']
@@ -335,12 +385,67 @@ def transpile(tokenList: list) -> str:
             columnNo = ' '.join(temp[1])
             string = ' '.join(temp[2])
             subroutines[subName].append(
-                f"PRINT move$;CHR$({lineNo}+32);CHR$({columnNo}+32)"
+                f"PRINT move$;CHR$({lineNo}+32);CHR$({columnNo}+32);"
             )
             subroutines[subName].append(
                 f"PRINT {string};"
             )
             tokenIdx += endLineStatementPos[finishedLines] - tokenIdx
+        elif tokenList[tokenIdx].tokenVal == 'Print':
+            temp = list(list(g) for k,g in itertools.groupby(tokenList[tokenIdx+2:endLineStatementPos[finishedLines]-1], lambda x: x.tokenType not in ['ARGUMENTS_SEP']) if k)
+            temp = [transpileFlat(t_list) for t_list in temp]
+            string = ' '.join(temp[0])
+            subroutines[subName].append(
+                f"PRINT {string}"
+            )
+            tokenIdx += endLineStatementPos[finishedLines] - tokenIdx
+        elif tokenList[tokenIdx].tokenVal == 'clearScreen':
+            subroutines[subName].append(
+                f"PRINT clear$;"
+            )
+            tokenIdx += endLineStatementPos[finishedLines] - tokenIdx
+        elif tokenList[tokenIdx].tokenVal == 'enableCursor':
+            subroutines[subName].append(
+                f"PRINT con$;"
+            )
+            tokenIdx += endLineStatementPos[finishedLines] - tokenIdx
+        elif tokenList[tokenIdx].tokenVal == 'disableCursor':
+            subroutines[subName].append(
+                f"PRINT coff$;"
+            )
+            tokenIdx += endLineStatementPos[finishedLines] - tokenIdx
+        elif tokenList[tokenIdx].tokenVal == 'resetCursor':
+            subroutines[subName].append(
+                f"PRINT home$;"
+            )
+            tokenIdx += endLineStatementPos[finishedLines] - tokenIdx
+
+        elif tokenList[tokenIdx].tokenVal == 'var':
+            temp = list(list(g) for k,g in itertools.groupby(tokenList[tokenIdx+1:endLineStatementPos[finishedLines]], lambda x: x.tokenType not in ['ASSIGN']) if k)
+            temp = [transpileFlat(t_list) for t_list in temp]
+            # for t in [token for tokenList in temp for token in tokenList if token.tokenVal == 'askInput']:
+            #     subroutines[subName].append(
+            #         "INPUT "
+            #     )
+            # print(temp)
+            varName = ' '.join(temp[0])
+            varValue = ' '.join(temp[1])
+            subroutines[subName].append(
+                f"{varName} = {varValue}"
+            )
+            tokenIdx += endLineStatementPos[finishedLines] - tokenIdx
+        
+        elif tokenList[tokenIdx].tokenVal == 'INPUT':
+            print("i have an input here", tokenIdx)
+            temp = list(list(g) for k,g in itertools.groupby(tokenList[tokenIdx+2:endLineStatementPos[finishedLines]-1], lambda x: x.tokenType not in ['ARGUMENTS_SEP']) if k)
+            temp = [transpileFlat(t_list) for t_list in temp]
+            inputString = ' '.join(temp[0])
+            variableName = ' '.join(temp[1])
+            subroutines[subName].append(
+                f"INPUT {inputString}, {variableName}"
+            )
+            tokenIdx += endLineStatementPos[finishedLines] - tokenIdx
+        
         elif tokenList[tokenIdx].tokenType == 'END_LINE':
             finishedLines += 1
             tokenIdx += 1
@@ -351,7 +456,7 @@ def transpile(tokenList: list) -> str:
             break
         print(subroutines)
 
-
+    return "\n".join([f'REM {key}\n' + "\n".join(text) for key, text in subroutines.items()])
 
 
 if __name__ == '__main__':
@@ -369,5 +474,7 @@ if __name__ == '__main__':
     ts.scale = 20
     ts.rotation = 90
     newickTree.render("Tree.png", w=1830, units="mm", tree_style=ts)
-
-    print(transpile(tokenify(input_tokens)))
+    
+    class_tokens = tokenify(input_tokens)
+    class_tokens = cleanInputs(class_tokens)
+    print(transpile(class_tokens))

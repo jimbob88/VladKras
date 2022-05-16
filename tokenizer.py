@@ -141,16 +141,16 @@ if __name__ == '__main__':
                 char_pos += temp_char_index
         elif text[char_pos].isnumeric():
             # Match numbers
-            temp_char=''
-            temp_char_index=1
-            t_str = text[char_pos]
-            while temp_char.isnumeric() or temp_char == '.':
+            temp_char: str =''
+            temp_char_index: int=1
+            t_str: str = text[char_pos]
+            while True:
                 temp_char = text[char_pos + temp_char_index]
                 if not (temp_char.isnumeric() or temp_char == '.'):
                     break
                 t_str += temp_char
                 temp_char_index += 1
-            if '.' in t_str:
+            if '.' in t_str or temp_char == '.':
                 tokens.append(('FLOAT', char_pos, float(t_str)))
                 char_pos += temp_char_index
             else:

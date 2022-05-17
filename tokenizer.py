@@ -121,7 +121,7 @@ if __name__ == '__main__':
                 temp_char_index += 1
             # temp_char can be treated as the escape character in this case
             
-            if (temp_char in [' ', '|', '(']) and t_str.lower() in ['sub', 'var', 'while', 'if', 'for', 'break', 'call']:
+            if (temp_char in [' ', '|', '(']) and t_str.lower() in ['sub', 'var', 'while', 'if', 'for', 'break', 'call', 'else']:
                 tokens.append(('STATEMENT', char_pos, t_str))
                 if temp_char == '(':
                     tokens.append(('ARGUMENTS_START', char_pos + temp_char_index, '('))

@@ -301,6 +301,10 @@ def transpileFlat(flatTokenList: list) -> list:
             code[-1] += 'WHILE '
         elif token.tokenType == 'STRING':
             code[-1] += f'"{token.tokenVal}"'
+        elif token.tokenVal == 'true':
+            code[-1] += "1"
+        elif token.tokenVal == 'false':
+            code[-1] += "0"
         # elif token.tokenVal == 'askInput':
 
 
@@ -348,10 +352,67 @@ def cleanInputs(tokenList: list) -> list:
         ]
         pprint.pprint([token.tokenVal for token in tokenList])
         
-        
-
     return tokenList
         
+def cleanWhile(tokenList: list) -> list:
+    """
+    While loops can more easily be defined as an indefinite loop
+
+    while (condition) {
+
+    }
+
+    is the same as:
+
+    while (1) {
+        if (condition) {
+            break
+        }
+    }
+    """
+    noWhiles = 0
+    while True:
+        pprint.pprint([t.tokenType for t in tokenList])
+        whiles = [idx for idx, token in enumerate(tokenList) if token.tokenVal == 'while']
+        if len(whiles) == 0:
+            break
+        else:
+            print(whiles)
+        
+        idx = whiles[0]
+        noWhiles += 1
+        # tokenIdx = idx + 1
+
+        findConditionWrapper = [i+idx+2 for i, token in enumerate(tokenList[idx+2:]) if token.tokenType == 'CONDITION_WRAPPER']
+        # conditions = tokenList[idx+2:findConditionWrapper[0]]
+        print("findConditionWrapper", findConditionWrapper)
+        tokenIdx = idx + (findConditionWrapper[0]-idx)
+        print(tokenIdx)
+
+
+
+        depth = 0
+        while True:
+            tokenIdx += 1
+            if tokenList[tokenIdx].tokenType == 'START_BLOCK':
+                depth -= 1
+            elif tokenList[tokenIdx].tokenType == 'END_BLOCK':
+                depth += 1
+            if depth == 0:
+                break
+        print("END OF WHILE", tokenIdx)
+
+        tokenList[idx] = tokenType(('STATEMENT', -1, 'WHILE'))
+        
+
+        tokenList[tokenIdx] = tokenType(('END_BLOCK', -1, 'WEND'))
+        
+
+
+    return tokenList        
+
+
+
 
 
 def transpile(tokenList: list) -> str:
@@ -436,7 +497,6 @@ def transpile(tokenList: list) -> str:
             tokenIdx += endLineStatementPos[finishedLines] - tokenIdx
         
         elif tokenList[tokenIdx].tokenVal == 'INPUT':
-            print("i have an input here", tokenIdx)
             temp = list(list(g) for k,g in itertools.groupby(tokenList[tokenIdx+2:endLineStatementPos[finishedLines]-1], lambda x: x.tokenType not in ['ARGUMENTS_SEP']) if k)
             temp = [transpileFlat(t_list) for t_list in temp]
             inputString = ' '.join(temp[0])
@@ -445,16 +505,38 @@ def transpile(tokenList: list) -> str:
                 f"INPUT {inputString}, {variableName}"
             )
             tokenIdx += endLineStatementPos[finishedLines] - tokenIdx
+
+        elif tokenList[tokenIdx].tokenVal == 'WHILE':
+            findConditionWrapper = [i+tokenIdx+2 for i, token in enumerate(tokenList[tokenIdx+2:]) if token.tokenType == 'CONDITION_WRAPPER']
+            print(findConditionWrapper, tokenIdx)
+            pprint.pprint(
+                [(t.tokenVal, t.tokenType) for t in tokenList[tokenIdx-5:findConditionWrapper[0]+2]]
+            )
+            conditions = tokenList[tokenIdx+2:findConditionWrapper[0]]
+            subroutines[subName].append(
+                f"WHILE {' '.join(transpileFlat(conditions))}"
+            )
+            print("cond:", [c.tokenType for c in conditions])
+
+            tokenIdx += len(conditions) + 2
+            
+
+        elif tokenList[tokenIdx].tokenVal == 'WEND':
+            subroutines[subName].append(
+                f"WEND"
+            )
+            tokenIdx += 1
+            
+
         
         elif tokenList[tokenIdx].tokenType == 'END_LINE':
             finishedLines += 1
             tokenIdx += 1
         else:
             tokenIdx += 1
-        print(tokenIdx)
+        print(tokenIdx, subroutines)
         if tokenIdx >= len(tokenList):
             break
-        print(subroutines)
 
     return "\n".join([f'REM {key}\n' + "\n".join(text) for key, text in subroutines.items()])
 
@@ -477,4 +559,5 @@ if __name__ == '__main__':
     
     class_tokens = tokenify(input_tokens)
     class_tokens = cleanInputs(class_tokens)
+    class_tokens = cleanWhile(class_tokens)
     print(transpile(class_tokens))

@@ -4,7 +4,7 @@ import ete3
 import pprint
 import itertools
 
-input_tokens = [('STATEMENT', 0, 'sub'),
+input_tokens =[('STATEMENT', 0, 'sub'),
  ('VARIABLE', 4, 'other'),
  ('START_BLOCK', 10, '{'),
  ('FUNCTION', 17, 'printAt'),
@@ -66,7 +66,7 @@ input_tokens = [('STATEMENT', 0, 'sub'),
  ('STATEMENT', 286, 'var'),
  ('VARIABLE', 290, 'i'),
  ('ASSIGN', 292, '='),
- ('INT', 294, 0),
+ ('INT', 294, 1),
  ('END_LINE', 295, ';'),
  ('FUNCTION', 301, 'Print'),
  ('ARGUMENTS_START', 306, '('),
@@ -106,47 +106,47 @@ input_tokens = [('STATEMENT', 0, 'sub'),
  ('END_BLOCK', 408, '}'),
  ('STATEMENT', 415, 'while'),
  ('CONDITION_WRAPPER', 421, '|'),
- ('BOOLEAN', 422, 'true'),
- ('CONDITION_WRAPPER', 426, '|'),
- ('START_BLOCK', 428, '{'),
- ('STATEMENT', 438, 'if'),
- ('CONDITION_WRAPPER', 441, '|'),
- ('VARIABLE', 442, 'i'),
- ('COMPARISON', 444, '=='),
- ('INT', 447, 0),
- ('CONDITION_WRAPPER', 448, '|'),
- ('START_BLOCK', 450, '{'),
- ('FUNCTION', 464, 'Print'),
- ('ARGUMENTS_START', 469, '('),
- ('STRING', 470, 'Hello'),
- ('ARGUMENTS_END', 477, ')'),
- ('END_LINE', 478, ';'),
- ('VARIABLE', 492, 'i'),
- ('PLUS_EQUALS', 494, '+='),
- ('PLUS', 496, '+'),
- ('INT', 497, 1),
- ('END_LINE', 498, ';'),
- ('END_BLOCK', 508, '}'),
- ('VARIABLE', 510, 'else'),
- ('START_BLOCK', 515, '{'),
- ('FUNCTION', 529, 'Print'),
- ('ARGUMENTS_START', 534, '('),
- ('STRING', 535, 'No'),
- ('ARGUMENTS_END', 539, ')'),
- ('END_LINE', 540, ';'),
- ('VARIABLE', 554, 'i'),
- ('MINUS_EQUALS', 556, '-='),
- ('MINUS', 558, '-'),
- ('INT', 559, 1),
- ('END_LINE', 560, ';'),
- ('END_BLOCK', 570, '}'),
- ('VARIABLE', 580, 'break'),
- ('END_LINE', 585, ';'),
- ('END_BLOCK', 591, '}'),
- ('STATEMENT', 597, 'call'),
- ('VARIABLE', 602, 'other'),
- ('END_LINE', 607, ';'),
- ('END_BLOCK', 609, '}')]
+ ('VARIABLE', 422, 'i'),
+ ('GREATER_THAN', 424, '>'),
+ ('INT', 426, 0),
+ ('CONDITION_WRAPPER', 427, '|'),
+ ('START_BLOCK', 429, '{'),
+ ('STATEMENT', 439, 'if'),
+ ('CONDITION_WRAPPER', 442, '|'),
+ ('VARIABLE', 443, 'i'),
+ ('COMPARISON', 445, '=='),
+ ('INT', 448, 0),
+ ('CONDITION_WRAPPER', 449, '|'),
+ ('START_BLOCK', 451, '{'),
+ ('FUNCTION', 465, 'Print'),
+ ('ARGUMENTS_START', 470, '('),
+ ('STRING', 471, 'Hello'),
+ ('ARGUMENTS_END', 478, ')'),
+ ('END_LINE', 479, ';'),
+ ('VARIABLE', 493, 'i'),
+ ('PLUS_EQUALS', 495, '+='),
+ ('PLUS', 497, '+'),
+ ('INT', 498, 1),
+ ('END_LINE', 499, ';'),
+ ('END_BLOCK', 509, '}'),
+ ('STATEMENT', 511, 'else'),
+ ('START_BLOCK', 516, '{'),
+ ('FUNCTION', 530, 'Print'),
+ ('ARGUMENTS_START', 535, '('),
+ ('STRING', 536, 'No'),
+ ('ARGUMENTS_END', 540, ')'),
+ ('END_LINE', 541, ';'),
+ ('VARIABLE', 555, 'i'),
+ ('MINUS_EQUALS', 557, '-='),
+ ('MINUS', 559, '-'),
+ ('INT', 560, 1),
+ ('END_LINE', 561, ';'),
+ ('END_BLOCK', 571, '}'),
+ ('END_BLOCK', 577, '}'),
+ ('STATEMENT', 583, 'call'),
+ ('VARIABLE', 588, 'other'),
+ ('END_LINE', 593, ';'),
+ ('END_BLOCK', 595, '}')]
 
 
 
@@ -411,7 +411,138 @@ def cleanWhile(tokenList: list) -> list:
 
     return tokenList        
 
+def cleanIfStatement(tokenList: list) -> list:
+    """If statements can only be one line, so have to be separated
 
+    if | x == 0 | {
+        Print("Hello world");
+    } else {
+        Print("Access Denied");
+    }
+
+    Can be rewritten as
+
+    if | x == 0 | {
+        call reservedIf1;
+    } else {
+        call reservedElse1;
+    }
+
+    """
+
+    noIfs = 0
+    # noElse = 0
+    while True:
+        ifStatements = [idx for idx, token in enumerate(tokenList) if token.tokenVal == 'if']
+        
+        if len(ifStatements) == 0:
+            break
+        else:
+            print(ifStatements)
+        
+        idx = ifStatements[0]
+        print("Value: ", tokenList[idx].tokenVal)
+        noIfs += 1
+
+        findConditionWrapper = [i+idx+2 for i, token in enumerate(tokenList[idx+2:]) if token.tokenType == 'CONDITION_WRAPPER']
+        print("findConditionWrapper", findConditionWrapper)
+        tokenIdx = findConditionWrapper[0]
+        print(tokenIdx)
+
+        depth = 0
+        while True:
+            tokenIdx += 1
+            if tokenList[tokenIdx].tokenType == 'START_BLOCK':
+                depth -= 1
+            elif tokenList[tokenIdx].tokenType == 'END_BLOCK':
+                depth += 1
+            if depth == 0:
+                break
+        print("END OF IF Statement", tokenIdx)
+
+        endOfIfStatementBlock = tokenIdx
+        elseStatement = False
+        if tokenList[tokenIdx+1].tokenVal == 'else':
+            tokenIdx += 1
+            while True:
+                tokenIdx += 1
+                if tokenList[tokenIdx].tokenType == 'START_BLOCK':
+                    depth -= 1
+                elif tokenList[tokenIdx].tokenType == 'END_BLOCK':
+                    depth += 1
+                if depth == 0:
+                    break
+            print("End else")
+            endOfElseStatementBlock = tokenIdx
+            elseStatement = True
+            elseBlock = tokenList[endOfIfStatementBlock+3:endOfElseStatementBlock]
+        
+        subName =  f'reservedIfStatement{noIfs}'
+        elseSubName =  f'reservedElseStatement{noIfs}'
+
+        ifBlock = tokenList[findConditionWrapper[0]+2:endOfIfStatementBlock]
+
+        if not elseStatement:
+            tokenList[idx:endOfIfStatementBlock+1] = [
+                tokenType(("STATEMENT", -1, 'IF')),
+            ] + tokenList[idx+1:findConditionWrapper[0]+1] + [
+                tokenType(("STATEMENT", -1, 'THEN')),
+                tokenType(("STATEMENT", -1, 'call')),
+                tokenType(('VARIABLE', -1, subName)),
+                tokenType(('END_LINE', -1, ';'))
+            ]
+            print("Value: ", tokenList[idx].tokenVal)
+        else:
+            tokenList[idx:endOfElseStatementBlock+1] = [
+                tokenType(("STATEMENT", -1, 'IF')),
+            ] + tokenList[idx+1:findConditionWrapper[0]+1] + [
+                tokenType(("STATEMENT", -1, 'THEN')),
+                tokenType(("STATEMENT", -1, 'call')),
+                tokenType(('VARIABLE', -1, subName)),
+                tokenType(("STATEMENT", -1, 'ELSE')),
+                tokenType(("STATEMENT", -1, 'call')),
+                tokenType(('VARIABLE', -1, elseSubName)),
+                tokenType(('END_LINE', -1, ';'))
+            ]
+
+
+
+        tokenList.extend(
+            [
+                tokenType(('STATEMENT', -1, 'sub')),
+                tokenType(('VARIABLE', -1, subName)),
+                tokenType(('START_BLOCK', -1, '{'))
+            ] + ifBlock + [
+                tokenType(('END_BLOCK', -1, '}'))
+            ]
+        )
+        if elseStatement:
+             tokenList.extend(
+                [
+                    tokenType(('STATEMENT', -1, 'sub')),
+                    tokenType(('VARIABLE', -1, elseSubName)),
+                    tokenType(('START_BLOCK', -1, '{'))
+                ] + elseBlock + [
+                    tokenType(('END_BLOCK', -1, '}'))
+                ]
+            )
+
+        # pprint.pprint(
+        #     [
+        #     (t.tokenType, t.tokenVal) for t in tokenList
+        #     ]
+        # )
+        # exit()
+
+    print("FLAG DEBUG 1")
+    pprint.pprint(
+            [
+            (t.tokenType, t.tokenVal) for t in tokenList
+            ]
+        )
+    print(tokenList)
+
+    return tokenList
 
 
 
@@ -430,12 +561,12 @@ def transpile(tokenList: list) -> str:
     "'",
     '']
     subroutines = OrderedDict()
-    noIfStatements = 0
+    # noIfStatements = 0
     endLineStatementPos = [n for n, t in enumerate(tokenList) if t.tokenType == 'END_LINE']
     finishedLines = 0
     while True:
         if tokenList[tokenIdx].tokenVal == 'sub':
-            context = 'subroutine'
+            # context = 'subroutine'
             subName = tokenList[tokenIdx+1].tokenVal
             subroutines[subName] = []
             tokenIdx += 2
@@ -519,16 +650,35 @@ def transpile(tokenList: list) -> str:
             print("cond:", [c.tokenType for c in conditions])
 
             tokenIdx += len(conditions) + 2
-            
 
         elif tokenList[tokenIdx].tokenVal == 'WEND':
             subroutines[subName].append(
                 f"WEND"
             )
             tokenIdx += 1
+
+        elif tokenList[tokenIdx].tokenVal == 'IF':
+            findConditionWrapper = [i+tokenIdx+2 for i, token in enumerate(tokenList[tokenIdx+2:]) if token.tokenType == 'CONDITION_WRAPPER']
+            conditions = tokenList[tokenIdx+2:findConditionWrapper[0]]
+            subroutines[subName].append(
+                f"IF {' '.join(transpileFlat(conditions))} THEN "
+            )
+
+            tokenIdx += len(conditions) + 2
+
+        elif tokenList[tokenIdx].tokenVal == 'ELSE':
+            subroutines[subName][-1] += f" ELSE "
+            tokenIdx += 1
+
+        elif tokenList[tokenIdx].tokenVal == 'call':
+            if tokenList[tokenIdx+1].tokenType != 'VARIABLE':
+                raise SyntaxError("NO VARIABLE FOLLOWING CALL COMMAND")
+
+            subroutines[subName][-1] += f" replaceCall {tokenList[tokenIdx+1].tokenVal}"
             
 
-        
+            tokenIdx += 2
+            
         elif tokenList[tokenIdx].tokenType == 'END_LINE':
             finishedLines += 1
             tokenIdx += 1
@@ -538,7 +688,7 @@ def transpile(tokenList: list) -> str:
         if tokenIdx >= len(tokenList):
             break
 
-    return "\n".join([f'REM {key}\n' + "\n".join(text) for key, text in subroutines.items()])
+    return "\n".join([f'REM SUB:{key}\n' + "\n".join(text) + "\nRETURN" for key, text in subroutines.items()])
 
 
 if __name__ == '__main__':
@@ -560,4 +710,5 @@ if __name__ == '__main__':
     class_tokens = tokenify(input_tokens)
     class_tokens = cleanInputs(class_tokens)
     class_tokens = cleanWhile(class_tokens)
+    class_tokens = cleanIfStatement(class_tokens)
     print(transpile(class_tokens))

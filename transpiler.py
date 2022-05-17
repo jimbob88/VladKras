@@ -4,7 +4,7 @@ import ete3
 import pprint
 import itertools
 
-input_tokens =[('STATEMENT', 0, 'sub'),
+input_tokens = [('STATEMENT', 0, 'sub'),
  ('VARIABLE', 4, 'other'),
  ('START_BLOCK', 10, '{'),
  ('FUNCTION', 17, 'printAt'),
@@ -77,76 +77,70 @@ input_tokens =[('STATEMENT', 0, 'sub'),
  ('VARIABLE', 326, 'lastName$'),
  ('ARGUMENTS_END', 335, ')'),
  ('END_LINE', 336, ';'),
- ('STATEMENT', 343, 'var'),
- ('VARIABLE', 347, 'j'),
- ('ASSIGN', 349, '='),
- ('INT', 351, 0),
- ('END_LINE', 352, ';'),
- ('STATEMENT', 358, 'for'),
- ('ARGUMENTS_START', 361, '('),
- ('VARIABLE', 362, 'j'),
- ('ASSIGN', 364, '='),
- ('INT', 366, 0),
+ ('STATEMENT', 344, 'for'),
+ ('ARGUMENTS_START', 347, '('),
+ ('STATEMENT', 348, 'var'),
+ ('VARIABLE', 352, 'j'),
+ ('ASSIGN', 354, '='),
+ ('INT', 356, 0),
+ ('ARGUMENTS_SEP', 357, ','),
+ ('CONDITION_WRAPPER', 359, '|'),
+ ('VARIABLE', 360, 'j'),
+ ('LESS_THAN', 362, '<'),
+ ('INT', 364, 19),
+ ('CONDITION_WRAPPER', 366, '|'),
  ('ARGUMENTS_SEP', 367, ','),
- ('CONDITION_WRAPPER', 369, '|'),
- ('VARIABLE', 370, 'j'),
- ('LESS_THAN', 372, '<'),
- ('INT', 374, 19),
- ('CONDITION_WRAPPER', 376, '|'),
- ('ARGUMENTS_SEP', 377, ','),
- ('VARIABLE', 379, 'j'),
- ('PLUS_ONE', 380, '++'),
- ('ARGUMENTS_END', 382, ')'),
- ('START_BLOCK', 384, '{'),
- ('FUNCTION', 394, 'Print'),
- ('ARGUMENTS_START', 399, '('),
- ('VARIABLE', 400, 'j'),
- ('ARGUMENTS_END', 401, ')'),
- ('END_LINE', 402, ';'),
- ('END_BLOCK', 408, '}'),
- ('STATEMENT', 415, 'while'),
- ('CONDITION_WRAPPER', 421, '|'),
- ('VARIABLE', 422, 'i'),
- ('GREATER_THAN', 424, '>'),
- ('INT', 426, 0),
- ('CONDITION_WRAPPER', 427, '|'),
- ('START_BLOCK', 429, '{'),
- ('STATEMENT', 439, 'if'),
- ('CONDITION_WRAPPER', 442, '|'),
- ('VARIABLE', 443, 'i'),
- ('COMPARISON', 445, '=='),
- ('INT', 448, 0),
- ('CONDITION_WRAPPER', 449, '|'),
- ('START_BLOCK', 451, '{'),
- ('FUNCTION', 465, 'Print'),
- ('ARGUMENTS_START', 470, '('),
- ('STRING', 471, 'Hello'),
- ('ARGUMENTS_END', 478, ')'),
- ('END_LINE', 479, ';'),
- ('VARIABLE', 493, 'i'),
- ('PLUS_EQUALS', 495, '+='),
- ('PLUS', 497, '+'),
- ('INT', 498, 1),
- ('END_LINE', 499, ';'),
- ('END_BLOCK', 509, '}'),
- ('STATEMENT', 511, 'else'),
- ('START_BLOCK', 516, '{'),
- ('FUNCTION', 530, 'Print'),
- ('ARGUMENTS_START', 535, '('),
- ('STRING', 536, 'No'),
- ('ARGUMENTS_END', 540, ')'),
- ('END_LINE', 541, ';'),
- ('VARIABLE', 555, 'i'),
- ('MINUS_EQUALS', 557, '-='),
- ('MINUS', 559, '-'),
- ('INT', 560, 1),
- ('END_LINE', 561, ';'),
- ('END_BLOCK', 571, '}'),
- ('END_BLOCK', 577, '}'),
- ('STATEMENT', 583, 'call'),
- ('VARIABLE', 588, 'other'),
- ('END_LINE', 593, ';'),
- ('END_BLOCK', 595, '}')]
+ ('VARIABLE', 369, 'j'),
+ ('PLUS_ONE', 370, '++'),
+ ('ARGUMENTS_END', 372, ')'),
+ ('START_BLOCK', 374, '{'),
+ ('FUNCTION', 384, 'Print'),
+ ('ARGUMENTS_START', 389, '('),
+ ('VARIABLE', 390, 'j'),
+ ('ARGUMENTS_END', 391, ')'),
+ ('END_LINE', 392, ';'),
+ ('END_BLOCK', 398, '}'),
+ ('STATEMENT', 405, 'while'),
+ ('CONDITION_WRAPPER', 411, '|'),
+ ('VARIABLE', 412, 'i'),
+ ('GREATER_THAN', 414, '>'),
+ ('INT', 416, 0),
+ ('CONDITION_WRAPPER', 417, '|'),
+ ('START_BLOCK', 419, '{'),
+ ('STATEMENT', 429, 'if'),
+ ('CONDITION_WRAPPER', 432, '|'),
+ ('VARIABLE', 433, 'i'),
+ ('COMPARISON', 435, '=='),
+ ('INT', 438, 0),
+ ('CONDITION_WRAPPER', 439, '|'),
+ ('START_BLOCK', 441, '{'),
+ ('FUNCTION', 455, 'Print'),
+ ('ARGUMENTS_START', 460, '('),
+ ('STRING', 461, 'Hello'),
+ ('ARGUMENTS_END', 468, ')'),
+ ('END_LINE', 469, ';'),
+ ('VARIABLE', 483, 'i'),
+ ('PLUS_EQUALS', 485, '+='),
+ ('INT', 488, 1),
+ ('END_LINE', 489, ';'),
+ ('END_BLOCK', 499, '}'),
+ ('STATEMENT', 501, 'else'),
+ ('START_BLOCK', 506, '{'),
+ ('FUNCTION', 520, 'Print'),
+ ('ARGUMENTS_START', 525, '('),
+ ('STRING', 526, 'No'),
+ ('ARGUMENTS_END', 530, ')'),
+ ('END_LINE', 531, ';'),
+ ('VARIABLE', 545, 'i'),
+ ('MINUS_EQUALS', 547, '-='),
+ ('INT', 550, 1),
+ ('END_LINE', 551, ';'),
+ ('END_BLOCK', 561, '}'),
+ ('END_BLOCK', 567, '}'),
+ ('STATEMENT', 573, 'call'),
+ ('VARIABLE', 578, 'other'),
+ ('END_LINE', 583, ';'),
+ ('END_BLOCK', 585, '}')]
 
 
 
@@ -310,7 +304,7 @@ def transpileFlat(flatTokenList: list) -> list:
 
     return code
 
-def cleanInputs(tokenList: list) -> list:
+def cleanInputs(tokenList: list[tokenType]) -> list:
     # print("Inputs:", inputs)
     noInputs = 0
     # for noInputs, idx in enumerate(inputs):
@@ -354,9 +348,80 @@ def cleanInputs(tokenList: list) -> list:
         
     return tokenList
         
-def cleanWhile(tokenList: list) -> list:
+def cleanForLoops(tokenList: list[tokenType]) -> list:
+    """For loops can be rewritten as while statements
+
+    for (i = 0, i < 39, i++) {
+        
+    }
+
+    Can be rewritten as:
+
+    i = 0
+    WHILE i < 39 {
+
+        i++
+    }
+
     """
-    While loops can more easily be defined as an indefinite loop
+
+    noForLoops = 0
+    while True:
+        pprint.pprint([t.tokenType for t in tokenList])
+        forLoops = [idx for idx, token in enumerate(tokenList) if token.tokenVal == 'for']
+        if len(forLoops) == 0:
+            break
+        else:
+            print(forLoops)
+        
+        idx = forLoops[0]
+        noForLoops += 1
+
+        findArgumentEnd = [i+idx+2 for i, token in enumerate(tokenList[idx+2:]) if token.tokenType == 'ARGUMENTS_END']
+        separatedConditions = list(list(g) for k,g in itertools.groupby(tokenList[idx+2:findArgumentEnd[0]], lambda x: x.tokenType not in ['ARGUMENTS_SEP']) if k)
+        pprint.pprint(
+            [
+                (z.tokenVal, z.tokenType) for x in separatedConditions for z in x
+            ]
+            )
+
+        tokenIdx = findArgumentEnd[0] 
+        depth = 0
+        while True:
+            tokenIdx += 1
+            if tokenList[tokenIdx].tokenType == 'START_BLOCK':
+                depth -= 1
+            elif tokenList[tokenIdx].tokenType == 'END_BLOCK':
+                depth += 1
+            if depth == 0:
+                break
+
+        print(tokenList[tokenIdx].tokenType, tokenIdx)
+        forLoopContents = tokenList[findArgumentEnd[0]+2:tokenIdx]
+        forLoopStart = separatedConditions[0]
+        forLoopCondition = separatedConditions[1]
+        forLoopIterator = separatedConditions[2]
+        pprint.pprint([(token.tokenVal, token.tokenType) for token in forLoopContents])
+
+        tokenList[idx:tokenIdx+1] = forLoopStart + [
+            tokenType(('END_LINE', -1, ';')),
+            tokenType(('STATEMENT', -1, 'WHILE'))
+        ] + forLoopCondition + [ 
+            tokenType(('START_BLOCK', -1, '{'))
+        ] + forLoopContents + forLoopIterator + [
+            tokenType(('END_LINE', -1, ';')),
+            tokenType(('END_BLOCK', -1, 'WEND'))
+        ]
+
+        
+        # exit()
+
+    
+    return tokenList
+
+
+def cleanWhile(tokenList: list[tokenType]) -> list:
+    """While loops can more easily be defined as an indefinite loop
 
     while (condition) {
 
@@ -675,9 +740,21 @@ def transpile(tokenList: list) -> str:
                 raise SyntaxError("NO VARIABLE FOLLOWING CALL COMMAND")
 
             subroutines[subName][-1] += f" replaceCall {tokenList[tokenIdx+1].tokenVal}"
-            
-
             tokenIdx += 2
+
+        elif tokenList[tokenIdx].tokenType == 'VARIABLE':
+            idx = tokenIdx
+            while True:
+                idx += 1
+                if tokenList[idx].tokenType == 'END_LINE':
+                    break
+            subroutines[subName].append(
+                ' '.join(transpileFlat(tokenList[tokenIdx:idx]))
+            )
+            tokenIdx += idx - tokenIdx
+    
+        # elif tokenList[tokenIdx].tokenType in ['INT', 'FLOAT', 'PLUS', 'MINUS', 'DIVIDE', 'MULTIPLY', 'LESS_THAN', 'GREATER_THAN', 'LESS_OR_EQUAL', 'GREATER_OR_EQUAL', 'ASSIGN', 'NOT_EQUAL']:
+
             
         elif tokenList[tokenIdx].tokenType == 'END_LINE':
             finishedLines += 1
@@ -709,6 +786,7 @@ if __name__ == '__main__':
     
     class_tokens = tokenify(input_tokens)
     class_tokens = cleanInputs(class_tokens)
+    class_tokens = cleanForLoops(class_tokens)
     class_tokens = cleanWhile(class_tokens)
     class_tokens = cleanIfStatement(class_tokens)
     print(transpile(class_tokens))

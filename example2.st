@@ -14,8 +14,8 @@ sub main {
     var i = 1;
     Print("Hello " + name$ + lastName$);
 
-    var j = 0;
-    for(j = 0, |j < 19|, j++) {
+
+    for(var j = 0, |j < 19|, j++) {
         Print(j);
     }
 

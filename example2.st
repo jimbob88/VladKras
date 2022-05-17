@@ -11,7 +11,7 @@ sub main {
     var name$ = "James";
     var lastName$ = askInput("What is your last name? ");
     var fl = 1.0;
-    var i = 0;
+    var i = 1;
     Print("Hello " + name$ + lastName$);
 
     var j = 0;
@@ -19,7 +19,7 @@ sub main {
         Print(j);
     }
 
-    while |true| {
+    while |i > 0| {
         if |i == 0| {
             Print("Hello");
             i += 1;
@@ -27,7 +27,6 @@ sub main {
             Print("No");
             i -= 1;
         }
-        break;
     }
     call other;
 }

@@ -30,7 +30,7 @@ if __name__ == '__main__':
             if text[char_pos + 1] == '=':
                 tokens.append(('PLUS_EQUALS', char_pos, '+='))
                 char_pos += 2
-            if text[char_pos + 1] == '+':
+            elif text[char_pos + 1] == '+':
                 tokens.append(('PLUS_ONE', char_pos, '++'))
                 char_pos += 2
             else:
@@ -40,7 +40,7 @@ if __name__ == '__main__':
             if text[char_pos + 1] == '=':
                 tokens.append(('MINUS_EQUALS', char_pos, '-='))
                 char_pos += 2 
-            if text[char_pos + 1] == '-':
+            elif text[char_pos + 1] == '-':
                 tokens.append(('MINUS_ONE', char_pos, '--'))
                 char_pos += 2 
             else:

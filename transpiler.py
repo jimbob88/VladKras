@@ -3,6 +3,9 @@ import ete3
 import pprint
 import itertools
 import re
+import logging
+
+logger = logging.getLogger(__name__)
 
 input_tokens = [('STATEMENT', 0, 'sub'),
  ('VARIABLE', 4, 'other'),
@@ -239,8 +242,6 @@ def treeify(tokens: list) -> Tree:
             tree.connectToken(t=classed_tokens[token_idx])
             tree.decreaseDepth()
             token_idx += 1
-        
-        print(token_idx, tree)
 
         if token_idx >= len(tokens):
             break
@@ -305,7 +306,6 @@ def transpileFlat(flatTokenList: list) -> list:
     return code
 
 def cleanInputs(tokenList: list[tokenType]) -> list:
-    # print("Inputs:", inputs)
     noInputs = 0
     # for noInputs, idx in enumerate(inputs):
     while True:
@@ -326,7 +326,6 @@ def cleanInputs(tokenList: list[tokenType]) -> list:
                 break
         
         inputString = tokenList[idx+2:tokenIdx]
-        print("inputString", inputString)
         tokenList[idx:tokenIdx] = [
            tokenType(('VARIABLE', -1, f"reservedInputValue{noInputs}$"))
         ]
@@ -344,7 +343,6 @@ def cleanInputs(tokenList: list[tokenType]) -> list:
             tokenType(('ARGUMENTS_END', -1, ')')),
             tokenType(('END_LINE', -1, ';'))
         ]
-        pprint.pprint([token.tokenVal for token in tokenList])
         
     return tokenList
         
@@ -367,23 +365,15 @@ def cleanForLoops(tokenList: list[tokenType]) -> list:
 
     noForLoops = 0
     while True:
-        pprint.pprint([t.tokenType for t in tokenList])
         forLoops = [idx for idx, token in enumerate(tokenList) if token.tokenVal == 'for']
         if len(forLoops) == 0:
             break
-        else:
-            print(forLoops)
         
         idx = forLoops[0]
         noForLoops += 1
 
         findArgumentEnd = [i+idx+2 for i, token in enumerate(tokenList[idx+2:]) if token.tokenType == 'ARGUMENTS_END']
         separatedConditions = list(list(g) for k,g in itertools.groupby(tokenList[idx+2:findArgumentEnd[0]], lambda x: x.tokenType not in ['ARGUMENTS_SEP']) if k)
-        pprint.pprint(
-            [
-                (z.tokenVal, z.tokenType) for x in separatedConditions for z in x
-            ]
-            )
 
         tokenIdx = findArgumentEnd[0] 
         depth = 0
@@ -396,12 +386,12 @@ def cleanForLoops(tokenList: list[tokenType]) -> list:
             if depth == 0:
                 break
 
-        print(tokenList[tokenIdx].tokenType, tokenIdx)
+
         forLoopContents = tokenList[findArgumentEnd[0]+2:tokenIdx]
         forLoopStart = separatedConditions[0]
         forLoopCondition = separatedConditions[1]
         forLoopIterator = separatedConditions[2]
-        pprint.pprint([(token.tokenVal, token.tokenType) for token in forLoopContents])
+
 
         tokenList[idx:tokenIdx+1] = forLoopStart + [
             tokenType(('END_LINE', -1, ';')),
@@ -437,12 +427,9 @@ def cleanWhile(tokenList: list[tokenType]) -> list:
     """
     noWhiles = 0
     while True:
-        pprint.pprint([t.tokenType for t in tokenList])
         whiles = [idx for idx, token in enumerate(tokenList) if token.tokenVal == 'while']
         if len(whiles) == 0:
             break
-        else:
-            print(whiles)
         
         idx = whiles[0]
         noWhiles += 1
@@ -450,9 +437,7 @@ def cleanWhile(tokenList: list[tokenType]) -> list:
 
         findConditionWrapper = [i+idx+2 for i, token in enumerate(tokenList[idx+2:]) if token.tokenType == 'CONDITION_WRAPPER']
         # conditions = tokenList[idx+2:findConditionWrapper[0]]
-        print("findConditionWrapper", findConditionWrapper)
         tokenIdx = idx + (findConditionWrapper[0]-idx)
-        print(tokenIdx)
 
 
 
@@ -465,7 +450,6 @@ def cleanWhile(tokenList: list[tokenType]) -> list:
                 depth += 1
             if depth == 0:
                 break
-        print("END OF WHILE", tokenIdx)
 
         tokenList[idx] = tokenType(('STATEMENT', -1, 'WHILE'))
         
@@ -502,17 +486,14 @@ def cleanIfStatement(tokenList: list) -> list:
         
         if len(ifStatements) == 0:
             break
-        else:
-            print(ifStatements)
         
         idx = ifStatements[0]
-        print("Value: ", tokenList[idx].tokenVal)
         noIfs += 1
 
         findConditionWrapper = [i+idx+2 for i, token in enumerate(tokenList[idx+2:]) if token.tokenType == 'CONDITION_WRAPPER']
-        print("findConditionWrapper", findConditionWrapper)
+
         tokenIdx = findConditionWrapper[0]
-        print(tokenIdx)
+
 
         depth = 0
         while True:
@@ -523,7 +504,6 @@ def cleanIfStatement(tokenList: list) -> list:
                 depth += 1
             if depth == 0:
                 break
-        print("END OF IF Statement", tokenIdx)
 
         endOfIfStatementBlock = tokenIdx
         elseStatement = False
@@ -537,7 +517,6 @@ def cleanIfStatement(tokenList: list) -> list:
                     depth += 1
                 if depth == 0:
                     break
-            print("End else")
             endOfElseStatementBlock = tokenIdx
             elseStatement = True
             elseBlock = tokenList[endOfIfStatementBlock+3:endOfElseStatementBlock]
@@ -556,7 +535,6 @@ def cleanIfStatement(tokenList: list) -> list:
                 tokenType(('VARIABLE', -1, subName)),
                 tokenType(('END_LINE', -1, ';'))
             ]
-            print("Value: ", tokenList[idx].tokenVal)
         else:
             tokenList[idx:endOfElseStatementBlock+1] = [
                 tokenType(("STATEMENT", -1, 'IF')),
@@ -592,20 +570,6 @@ def cleanIfStatement(tokenList: list) -> list:
                 ]
             )
 
-        # pprint.pprint(
-        #     [
-        #     (t.tokenType, t.tokenVal) for t in tokenList
-        #     ]
-        # )
-        # exit()
-
-    print("FLAG DEBUG 1")
-    pprint.pprint(
-            [
-            (t.tokenType, t.tokenVal) for t in tokenList
-            ]
-        )
-    print(tokenList)
 
     return tokenList
 
@@ -671,11 +635,7 @@ def transpile(tokenList: list) -> str:
         elif tokenList[tokenIdx].tokenVal == 'var':
             temp = list(list(g) for k,g in itertools.groupby(tokenList[tokenIdx+1:endLineStatementPos[finishedLines]], lambda x: x.tokenType not in ['ASSIGN']) if k)
             temp = [transpileFlat(t_list) for t_list in temp]
-            # for t in [token for tokenList in temp for token in tokenList if token.tokenVal == 'askInput']:
-            #     subroutines[subName].append(
-            #         "INPUT "
-            #     )
-            # print(temp)
+
             varName = ' '.join(temp[0])
             varValue = ' '.join(temp[1])
             subroutines[subName].append(
@@ -695,15 +655,11 @@ def transpile(tokenList: list) -> str:
 
         elif tokenList[tokenIdx].tokenVal == 'WHILE':
             findConditionWrapper = [i+tokenIdx+2 for i, token in enumerate(tokenList[tokenIdx+2:]) if token.tokenType == 'CONDITION_WRAPPER']
-            print(findConditionWrapper, tokenIdx)
-            pprint.pprint(
-                [(t.tokenVal, t.tokenType) for t in tokenList[tokenIdx-5:findConditionWrapper[0]+2]]
-            )
+
             conditions = tokenList[tokenIdx+2:findConditionWrapper[0]]
             subroutines[subName].append(
                 f"WHILE {' '.join(transpileFlat(conditions))}"
             )
-            print("cond:", [c.tokenType for c in conditions])
 
             tokenIdx += len(conditions) + 2
 
@@ -752,7 +708,6 @@ def transpile(tokenList: list) -> str:
             tokenIdx += 1
         else:
             tokenIdx += 1
-        print(tokenIdx, subroutines)
         if tokenIdx >= len(tokenList):
             break
 
@@ -778,7 +733,6 @@ def numberLines(transpiledCode: list[str]) -> str:
             line.replace(f"replaceCall {subName}", f"GOSUB {subPos*10}") for line in transpiledCode
         ]
     
-    print(transpiledCode)
 
     return '\n'.join(
         [f"{lineNo*10} {line}" for lineNo, line in enumerate(transpiledCode)]

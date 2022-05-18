@@ -685,28 +685,3 @@ def numberLines(transpiledCode: list[str]) -> str:
     return "\n".join(
         [f"{lineNo*10} {line}" for lineNo, line in enumerate(transpiledCode)]
     )
-
-
-# if __name__ == '__main__':
-#     # Create tree from tokens
-#     t = treeify(tokens=input_tokens)
-
-#     # Print tree
-#     newickString = toNewick(t.currentNode.connectedLowerNodes) + ";"
-#     newickTree = ete3.Tree(newickString)
-#     print(newickTree)
-
-#     # Create png of tree
-#     ts = ete3.TreeStyle()
-#     ts.show_leaf_name = True
-#     ts.scale = 20
-#     ts.rotation = 90
-#     newickTree.render("Tree.png", w=1830, units="mm", tree_style=ts)
-
-#     classTokens = tokenify(input_tokens)
-#     classTokens = cleanInputs(classTokens)
-#     classTokens = cleanForLoops(classTokens)
-#     classTokens = cleanWhile(classTokens)
-#     classTokens = cleanIfStatement(classTokens)
-#     transpiledLines = transpile(classTokens)
-#     print(numberLines(transpiledLines))

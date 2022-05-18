@@ -1,11 +1,12 @@
 import string
-import pprint
+import logging
 
-if __name__ == '__main__':
-    with open('example2.st', 'r') as f:
-        text = f.read()
+logging.basicConfig()
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
 
-
+def tokenizeStr(fileStr: str) -> list:
+    text = fileStr
     finished = False
     char_pos = 0
     whitespace = ['\n', '\r', ' ', '\t']
@@ -160,12 +161,22 @@ if __name__ == '__main__':
         else:
             char_pos += 1
 
-        print(tokens)
-        print(char_pos)
         if char_pos >= len(text):
             finished = True
             break
+    
+    return tokens
+
+def tokenizeFile(fileName: str) -> list:
+    with open(fileName, 'r') as f:
+        return tokenizeStr(f.read())
+
+if __name__ == '__main__':
+    logger.info(tokenizeFile('examples/example2.vkl'))
 
 
-    pprint.pprint(tokens)
+    
+
+
+    
         

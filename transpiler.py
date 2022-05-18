@@ -109,7 +109,7 @@ def treeify(tokens: list) -> Tree:
 
     return tree
 
-def toNewick(l):
+def toNewick(l: list[Node]):
   t_tuple = []
   for idx, node in enumerate(l):
     if len(node.connectedLowerNodes) > 0:
@@ -117,6 +117,12 @@ def toNewick(l):
     else:
       t_tuple.append(node.tokenDetails.tokenType)
   return str(t_tuple).replace('[', '(').replace(']', ')').replace("'", "").replace(' ', '') #tuple(tuple(sub) for sub in t_tuple)
+
+def toNewickStr(l: list[Node]) -> str:
+    return toNewick(l) + ";"
+
+def toNewickTree(l: list[Node]) -> ete3.Tree:
+    return ete3.Tree(toNewickStr(l))
 
 def toList(l):
   tList = []
@@ -263,10 +269,6 @@ def cleanForLoops(tokenList: list[tokenType]) -> list:
             tokenType(('END_LINE', -1, ';')),
             tokenType(('END_BLOCK', -1, 'WEND'))
         ]
-
-        
-        # exit()
-
     
     return tokenList
 

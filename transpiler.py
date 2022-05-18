@@ -1,8 +1,8 @@
 from collections import OrderedDict
-from re import L
 import ete3
 import pprint
 import itertools
+import re
 
 input_tokens = [('STATEMENT', 0, 'sub'),
  ('VARIABLE', 4, 'other'),
@@ -615,16 +615,7 @@ def transpile(tokenList: list) -> str:
     tokenIdx = 0
     context = 'null'
     subName = 'NA'
-    code = ['GOSUB main',
-    'escape$=CHR$(27)',
-    'clear$=escape$+"E"',
-    'home$=escape$+"H"',
-    'move$=escape$+"Y"',
-    'con$=e$+"e"',
-    'coff$=e$+"f"',
-    'REM other',
-    "'",
-    '']
+    
     subroutines = OrderedDict()
     # noIfStatements = 0
     endLineStatementPos = [n for n, t in enumerate(tokenList) if t.tokenType == 'END_LINE']
@@ -765,7 +756,33 @@ def transpile(tokenList: list) -> str:
         if tokenIdx >= len(tokenList):
             break
 
-    return "\n".join([f'REM SUB:{key}\n' + "\n".join(text) + "\nRETURN" for key, text in subroutines.items()])
+    return [f'REM SUB:{key}\n' + "\n".join(text) + "\nRETURN" for key, text in subroutines.items()]
+
+def numberLines(transpiledCode: list[str]) -> str:
+    constants = ['',
+    'escape$=CHR$(27)',
+    'clear$=escape$+"E"',
+    'home$=escape$+"H"',
+    'move$=escape$+"Y"',
+    'con$=e$+"e"',
+    'coff$=e$+"f"',
+    "'",
+    'replaceCall main']
+
+    transpiledCode = constants + transpiledCode
+    transpiledCode = '\n'.join(transpiledCode).split('\n')
+    regex = r"REM SUB:([\w\d]+)"
+    subroutinesDictionary = {re.match(regex, line).group(1): lineNo for lineNo, line in enumerate(transpiledCode) if re.match(regex, line)}
+    for subName, subPos in subroutinesDictionary.items():
+        transpiledCode = [
+            line.replace(f"replaceCall {subName}", f"GOSUB {subPos*10}") for line in transpiledCode
+        ]
+    
+    print(transpiledCode)
+
+    return '\n'.join(
+        [f"{lineNo*10} {line}" for lineNo, line in enumerate(transpiledCode)]
+    )
 
 
 if __name__ == '__main__':
@@ -784,9 +801,10 @@ if __name__ == '__main__':
     ts.rotation = 90
     newickTree.render("Tree.png", w=1830, units="mm", tree_style=ts)
     
-    class_tokens = tokenify(input_tokens)
-    class_tokens = cleanInputs(class_tokens)
-    class_tokens = cleanForLoops(class_tokens)
-    class_tokens = cleanWhile(class_tokens)
-    class_tokens = cleanIfStatement(class_tokens)
-    print(transpile(class_tokens))
+    classTokens = tokenify(input_tokens)
+    classTokens = cleanInputs(classTokens)
+    classTokens = cleanForLoops(classTokens)
+    classTokens = cleanWhile(classTokens)
+    classTokens = cleanIfStatement(classTokens)
+    transpiledLines = transpile(classTokens)
+    print(numberLines(transpiledLines))

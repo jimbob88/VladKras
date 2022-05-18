@@ -1,3 +1,4 @@
+from sre_parse import WHITESPACE
 import string
 import logging
 
@@ -5,16 +6,28 @@ logging.basicConfig()
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
+WHITESPACE = ["\n", "\r", " ", "\t"]
+STATEMENTS = [
+    "sub",
+    "var",
+    "while",
+    "if",
+    "for",
+    "break",
+    "call",
+    "else",
+]
+
 
 def tokenizeStr(fileStr: str) -> list:
     text = fileStr
     finished = False
     char_pos = 0
-    whitespace = ["\n", "\r", " ", "\t"]
+
     tokens = []  # list of tuples
     temp_char = ""
     while not finished:
-        if text[char_pos] in whitespace:
+        if text[char_pos] in WHITESPACE:
             # Skips all whitespace
             char_pos += 1
         elif text[char_pos] == "{":
@@ -123,16 +136,7 @@ def tokenizeStr(fileStr: str) -> list:
                 temp_char_index += 1
             # temp_char can be treated as the escape character in this case
 
-            if (temp_char in [" ", "|", "("]) and t_str.lower() in [
-                "sub",
-                "var",
-                "while",
-                "if",
-                "for",
-                "break",
-                "call",
-                "else",
-            ]:
+            if (temp_char in [" ", "|", "("]) and t_str.lower() in STATEMENTS:
                 tokens.append(("STATEMENT", char_pos, t_str))
                 if temp_char == "(":
                     tokens.append(("ARGUMENTS_START", char_pos + temp_char_index, "("))

@@ -47,11 +47,8 @@ class Tree:
             raise SyntaxError("It looks like there is an indentation issue")
 
 
-def tokenify(tokens: list) -> list:
-    classed_tokens = []
-    for token in tokens:
-        classed_tokens.append(tokenType(token))
-    return classed_tokens
+def tokenify(tokens: list[tuple]) -> list[tokenType]:
+    return [tokenType(token) for token in tokens]
 
 
 def treeify(tokens: list) -> Tree:

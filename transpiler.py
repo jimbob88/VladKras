@@ -7,145 +7,6 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-input_tokens = [('STATEMENT', 0, 'sub'),
- ('VARIABLE', 4, 'other'),
- ('START_BLOCK', 10, '{'),
- ('FUNCTION', 17, 'printAt'),
- ('ARGUMENTS_START', 24, '('),
- ('INT', 25, 6),
- ('ARGUMENTS_SEP', 26, ','),
- ('INT', 28, 1),
- ('ARGUMENTS_SEP', 29, ','),
- ('STRING', 31, 'I love programming'),
- ('ARGUMENTS_END', 51, ')'),
- ('END_LINE', 52, ';'),
- ('END_BLOCK', 54, '}'),
- ('STATEMENT', 57, 'sub'),
- ('VARIABLE', 61, 'main'),
- ('START_BLOCK', 66, '{'),
- ('FUNCTION', 72, 'clearScreen'),
- ('ARGUMENTS_START', 83, '('),
- ('ARGUMENTS_END', 84, ')'),
- ('END_LINE', 85, ';'),
- ('FUNCTION', 91, 'enableCursor'),
- ('ARGUMENTS_START', 103, '('),
- ('ARGUMENTS_END', 104, ')'),
- ('END_LINE', 105, ';'),
- ('FUNCTION', 111, 'disableCursor'),
- ('ARGUMENTS_START', 124, '('),
- ('ARGUMENTS_END', 125, ')'),
- ('END_LINE', 126, ';'),
- ('FUNCTION', 132, 'printAt'),
- ('ARGUMENTS_START', 139, '('),
- ('INT', 140, 1),
- ('ARGUMENTS_SEP', 141, ','),
- ('INT', 143, 2),
- ('ARGUMENTS_SEP', 144, ','),
- ('STRING', 146, 'Hello World'),
- ('ARGUMENTS_END', 159, ')'),
- ('END_LINE', 160, ';'),
- ('FUNCTION', 166, 'resetCursor'),
- ('ARGUMENTS_START', 177, '('),
- ('ARGUMENTS_END', 178, ')'),
- ('END_LINE', 179, ';'),
- ('STATEMENT', 185, 'var'),
- ('VARIABLE', 189, 'name$'),
- ('ASSIGN', 195, '='),
- ('STRING', 197, 'James'),
- ('END_LINE', 204, ';'),
- ('STATEMENT', 210, 'var'),
- ('VARIABLE', 214, 'lastName$'),
- ('ASSIGN', 224, '='),
- ('FUNCTION', 226, 'askInput'),
- ('ARGUMENTS_START', 234, '('),
- ('STRING', 235, 'What is your last name? '),
- ('ARGUMENTS_END', 261, ')'),
- ('END_LINE', 262, ';'),
- ('STATEMENT', 268, 'var'),
- ('VARIABLE', 272, 'fl'),
- ('ASSIGN', 275, '='),
- ('FLOAT', 277, 1.0),
- ('END_LINE', 280, ';'),
- ('STATEMENT', 286, 'var'),
- ('VARIABLE', 290, 'i'),
- ('ASSIGN', 292, '='),
- ('INT', 294, 1),
- ('END_LINE', 295, ';'),
- ('FUNCTION', 301, 'Print'),
- ('ARGUMENTS_START', 306, '('),
- ('STRING', 307, 'Hello '),
- ('PLUS', 316, '+'),
- ('VARIABLE', 318, 'name$'),
- ('PLUS', 324, '+'),
- ('VARIABLE', 326, 'lastName$'),
- ('ARGUMENTS_END', 335, ')'),
- ('END_LINE', 336, ';'),
- ('STATEMENT', 344, 'for'),
- ('ARGUMENTS_START', 347, '('),
- ('STATEMENT', 348, 'var'),
- ('VARIABLE', 352, 'j'),
- ('ASSIGN', 354, '='),
- ('INT', 356, 0),
- ('ARGUMENTS_SEP', 357, ','),
- ('CONDITION_WRAPPER', 359, '|'),
- ('VARIABLE', 360, 'j'),
- ('LESS_THAN', 362, '<'),
- ('INT', 364, 19),
- ('CONDITION_WRAPPER', 366, '|'),
- ('ARGUMENTS_SEP', 367, ','),
- ('VARIABLE', 369, 'j'),
- ('PLUS_ONE', 370, '++'),
- ('ARGUMENTS_END', 372, ')'),
- ('START_BLOCK', 374, '{'),
- ('FUNCTION', 384, 'Print'),
- ('ARGUMENTS_START', 389, '('),
- ('VARIABLE', 390, 'j'),
- ('ARGUMENTS_END', 391, ')'),
- ('END_LINE', 392, ';'),
- ('END_BLOCK', 398, '}'),
- ('STATEMENT', 405, 'while'),
- ('CONDITION_WRAPPER', 411, '|'),
- ('VARIABLE', 412, 'i'),
- ('GREATER_THAN', 414, '>'),
- ('INT', 416, 0),
- ('CONDITION_WRAPPER', 417, '|'),
- ('START_BLOCK', 419, '{'),
- ('STATEMENT', 429, 'if'),
- ('CONDITION_WRAPPER', 432, '|'),
- ('VARIABLE', 433, 'i'),
- ('COMPARISON', 435, '=='),
- ('INT', 438, 0),
- ('CONDITION_WRAPPER', 439, '|'),
- ('START_BLOCK', 441, '{'),
- ('FUNCTION', 455, 'Print'),
- ('ARGUMENTS_START', 460, '('),
- ('STRING', 461, 'Hello'),
- ('ARGUMENTS_END', 468, ')'),
- ('END_LINE', 469, ';'),
- ('VARIABLE', 483, 'i'),
- ('PLUS_EQUALS', 485, '+='),
- ('INT', 488, 1),
- ('END_LINE', 489, ';'),
- ('END_BLOCK', 499, '}'),
- ('STATEMENT', 501, 'else'),
- ('START_BLOCK', 506, '{'),
- ('FUNCTION', 520, 'Print'),
- ('ARGUMENTS_START', 525, '('),
- ('STRING', 526, 'No'),
- ('ARGUMENTS_END', 530, ')'),
- ('END_LINE', 531, ';'),
- ('VARIABLE', 545, 'i'),
- ('MINUS_EQUALS', 547, '-='),
- ('INT', 550, 1),
- ('END_LINE', 551, ';'),
- ('END_BLOCK', 561, '}'),
- ('END_BLOCK', 567, '}'),
- ('STATEMENT', 573, 'call'),
- ('VARIABLE', 578, 'other'),
- ('END_LINE', 583, ';'),
- ('END_BLOCK', 585, '}')]
-
-
 
 class tokenType:
     def __init__(self, tupe):
@@ -739,26 +600,26 @@ def numberLines(transpiledCode: list[str]) -> str:
     )
 
 
-if __name__ == '__main__':
-    # Create tree from tokens
-    t = treeify(tokens=input_tokens)
+# if __name__ == '__main__':
+#     # Create tree from tokens
+#     t = treeify(tokens=input_tokens)
 
-    # Print tree
-    newickString = toNewick(t.currentNode.connectedLowerNodes) + ";"
-    newickTree = ete3.Tree(newickString)
-    print(newickTree)
+#     # Print tree
+#     newickString = toNewick(t.currentNode.connectedLowerNodes) + ";"
+#     newickTree = ete3.Tree(newickString)
+#     print(newickTree)
 
-    # Create png of tree
-    ts = ete3.TreeStyle()
-    ts.show_leaf_name = True
-    ts.scale = 20
-    ts.rotation = 90
-    newickTree.render("Tree.png", w=1830, units="mm", tree_style=ts)
+#     # Create png of tree
+#     ts = ete3.TreeStyle()
+#     ts.show_leaf_name = True
+#     ts.scale = 20
+#     ts.rotation = 90
+#     newickTree.render("Tree.png", w=1830, units="mm", tree_style=ts)
     
-    classTokens = tokenify(input_tokens)
-    classTokens = cleanInputs(classTokens)
-    classTokens = cleanForLoops(classTokens)
-    classTokens = cleanWhile(classTokens)
-    classTokens = cleanIfStatement(classTokens)
-    transpiledLines = transpile(classTokens)
-    print(numberLines(transpiledLines))
+#     classTokens = tokenify(input_tokens)
+#     classTokens = cleanInputs(classTokens)
+#     classTokens = cleanForLoops(classTokens)
+#     classTokens = cleanWhile(classTokens)
+#     classTokens = cleanIfStatement(classTokens)
+#     transpiledLines = transpile(classTokens)
+#     print(numberLines(transpiledLines))

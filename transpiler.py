@@ -48,23 +48,23 @@ class Tree:
 
 
 def tokenify(tokens: list[tuple]) -> list[tokenType]:
+    """Convert a list of tuple tokens to the tokenType"""
     return [tokenType(token) for token in tokens]
 
 
-def treeify(tokens: list) -> Tree:
-    # Tree based off subroutines
+def treeify(tokens: list[tuple]) -> Tree:
+    """Convert list of tuple tokens to a Tree"""
     classed_tokens = tokenify(tokens)
 
-    # tree = OrderedDict()
-    tree = Tree()
-    token_idx = 0
-    current_sub = "NA"
-    while True:
+    tree: Tree = Tree()
+    token_idx: int = 0
+
+    while token_idx < len(tokens):
         if classed_tokens[token_idx].tokenVal == "sub":
             if classed_tokens[token_idx + 1].tokenType != "VARIABLE":
                 raise ValueError("Subroutine has no name")
             else:
-                subName = classed_tokens[token_idx + 1].tokenVal
+                subName: str = classed_tokens[token_idx + 1].tokenVal
                 tree.connectToken(t=tokenType(("DEF_SUB", token_idx, subName)))
                 token_idx += 2
         elif classed_tokens[token_idx].tokenType == "START_BLOCK":
@@ -107,8 +107,6 @@ def treeify(tokens: list) -> Tree:
             tree.decreaseDepth()
             token_idx += 1
 
-        if token_idx >= len(tokens):
-            break
 
     return tree
 

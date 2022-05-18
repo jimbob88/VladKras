@@ -88,7 +88,7 @@ to:
 ## Why does this exist?
 The problem this software was created to solve was the way subroutines and if statements are written in Mallard-80. Because there is no way to define a subroutine like in VB:
 
-```
+```vbnet
 [modifiers] Sub SubName[(parameterList)]
     ' Statements of the Sub procedure.
 End Sub
@@ -96,7 +96,7 @@ End Sub
 
 You have to instead use line numbers and write something like this:
 
-```
+```basic
 10 IF x = 0 THEN GOSUB 1000 ELSE GOSUB 1200
 1000 PRINT "HELLO WORLD"
 1010 RETURN
